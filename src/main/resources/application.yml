@@ -1,0 +1,4 @@
+server.port: 6060
+server.address: 0.0.0.0
+
+# security.oauth2.authorizationserver.jwt.enabled: false

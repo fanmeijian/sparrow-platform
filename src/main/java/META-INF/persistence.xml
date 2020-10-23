@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+	<persistence-unit name="standalone-framework">
+		<class>com.ywsoft.standalone.framework.entity.SwdAuthority</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdDataPermission</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdDataPermissionPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdField</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdFieldPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdFile</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdMenu</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysrole</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleFieldPermission</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleFieldPermissionPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleFile</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleFilePK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUser</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserFieldPermission</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserFieldPermissionPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserFile</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserFilePK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdEmployee</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdGroup</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdGroupUser</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdGroupUserPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdLevel</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdOrganization</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdOrganizationRelation</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdOrganizationRelationPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdRole</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSubGroup</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSubGroupPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUnit</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUnitLevel</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUnitLevelPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUnitRole</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUnitRolePK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdApp</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdDict</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdFlowNo</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdFlowNoPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdLoginLog</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdOperationLog</class>
+	</persistence-unit>
+</persistence>
