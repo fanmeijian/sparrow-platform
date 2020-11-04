@@ -73,6 +73,13 @@
 			<artifactId>jackson-datatype-hibernate5</artifactId>
 		</dependency>
 
+		<!-- add api documentation -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.4.8</version>
+		</dependency>
+
 	</dependencies>
 
 
