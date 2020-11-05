@@ -12,7 +12,6 @@ host: "localhost:6060"
 basePath: "/api"
 tags:
 - name: "组织"
-  description: "关于组织及组织关系的管理"
 - name: "组织单元"
 - name: "岗位"
 - name: "职级"
@@ -34,25 +33,17 @@ paths:
     post:
       tags:
       - "组织"
-      summary: "新增一个组织"
-      description: ""
-      operationId: "addPet"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - in: "body"
         name: "body"
-        description: "Pet object that needs to be added to the store"
         required: true
         schema:
           $ref: "#/definitions/SwdOrganization"
       responses:
-        "405":
-          description: "Invalid input"
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdOrganization"
       security:
       - petstore_auth:
         - "write:pets"
@@ -61,25 +52,14 @@ paths:
     put:
       tags:
       - "组织"
-      summary: "更新现有组织信息"
-      description: ""
-      operationId: "updatePet"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "id"
         in: "path"
-        description: "ID of pet to return"
         required: true
         type: "integer"
         format: "int64"
       - in: "body"
         name: "body"
-        description: "Pet object that needs to be added to the store"
         required: true
         schema:
           $ref: "#/definitions/SwdOrganization"
@@ -97,16 +77,9 @@ paths:
     get:
       tags:
       - "组织"
-      summary: "根据ID获取组织详情"
-      description: "Returns a single pet"
-      operationId: "getPetById"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "id"
         in: "path"
-        description: "ID of pet to return"
         required: true
         type: "integer"
         format: "int64"
@@ -124,12 +97,6 @@ paths:
     delete:
       tags:
       - "组织"
-      summary: "删除一个组织"
-      description: ""
-      operationId: "deletePet"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "api_key"
         in: "header"
@@ -137,7 +104,342 @@ paths:
         type: "string"
       - name: "id"
         in: "path"
-        description: "Pet id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /organizationRelation:
+    post:
+      tags: 
+      - "组织"
+      summary: "建立组织关系"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdOrganizationRelation"
+      responses:
+        "200":
+          description: "添加成功"
+          schema:
+            $ref: "#/definitions/SwdOrganizationRelation"
+    
+  /swdUnits:
+    post:
+      tags:
+      - "组织单元"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdUnit"
+      responses:
+        "200":
+          description: "添加成功"
+          schema:
+            $ref: "#/definitions/SwdUnit"
+  /swdUnits/{id}:
+    put:
+      tags:
+      - "组织单元"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdUnit"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdUnit"
+    get:
+      tags:
+      - "组织单元"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdUnit"
+    delete:
+      tags:
+      - "组织单元"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "成功"
+  /swdRoles:
+    post:
+      tags:
+      - "岗位"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdRole"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdRole"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /swdRoles/{id}:
+    put:
+      tags:
+      - "岗位"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdRole"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    get:
+      tags:
+      - "岗位"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdRole"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "岗位"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /swdLevels:
+    post:
+      tags:
+      - "职级"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdLevel"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdLevel"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /swdLevels/{id}:
+    put:
+      tags:
+      - "职级"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdLevel"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    get:
+      tags:
+      - "职级"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdLevel"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "职级"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /swdEmployees:
+    post:
+      tags:
+      - "人员"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdEmployee"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdEmployee"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /swdEmployees/{id}:
+    put:
+      tags:
+      - "人员"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdEmployee"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    get:
+      tags:
+      - "人员"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdEmployee"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "人员"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "id"
+        in: "path"
         required: true
         type: "integer"
         format: "int64"
@@ -177,6 +479,67 @@ definitions:
         format: "int32"
     xml:
       name: "SwdOrganization"
+  SwdOrganizationRelation:
+    type: "object"
+    properties:
+      id:
+        $ref: "#/definitions/SwdOrganizationRelationPK"
+      relation:
+        type: "integer"
+  SwdOrganizationRelationPK:
+    type: "object"
+    properties:
+      organizationId:
+        type: "string"
+      tartgetId:
+        type: "string"
+  SwdUnit:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      parentId:
+        type: "integer"
+      name:
+        type: "string"
+      stat:
+        type: "integer"
+        format: "int32"
+  SwdRole:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      code:
+        type: "string"
+      name:
+        type: "string"
+      stat:
+        type: "integer"
+        format: "int32"
+  SwdLevel:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      code:
+        type: "string"
+      name:
+        type: "string"
+      stat:
+        type: "integer"
+        format: "int32"
+  SwdEmployee:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      employeeno:
+        type: "string"
+      stat:
+        type: "string"
+      swdUnit:
+        $ref: "#/definitions/SwdUnit"
   ApiResponse:
     type: "object"
     properties:
