@@ -15,7 +15,7 @@ post /oauth2/token
 rest service url请参考wiki
 
 
-前端请参考项目sparrow-platform-ng
+前端请参考项目sparrow-platform-ng https://github.com/fanmeijian/sparrow-platform-ng
 
 接口文档请参考
 http://localhost:6060/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config

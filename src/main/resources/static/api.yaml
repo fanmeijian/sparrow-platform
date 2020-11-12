@@ -366,6 +366,87 @@ paths:
       - petstore_auth:
         - "write:pets"
         - "read:pets"
+  /swdGroups:
+    get:
+      tags:
+      - "群组"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdGroup"
+  /swdGroups/{id}:
+    post:
+      tags:
+      - "群组"
+      parameters:
+      - name: "id"
+        in: "path"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdGroup"
+    put:
+      tags:
+      - "群组"
+      parameters:
+      - name: "id"
+        in: "path"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdGroup"
+    delete:
+      tags:
+      - "群组"
+      parameters:
+      - name: "id"
+        in: "path"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+  /groupMember/{id}:
+    get:
+      tags:
+      - "群组"
+      description: "返回指定组包含的所有成员，群组"
+      parameters:
+      - name: "id"
+        in: "path"
+        type: "integer"
+        required: true
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdGroup"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdGroup"
+    put:
+      tags:
+      - "群组"
+      description: "设置群组成员"
+      parameters:
+      - name: "id"
+        in: "path"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdGroup"
   /swdEmployees:
     post:
       tags:
@@ -1159,6 +1240,15 @@ definitions:
       model:
         type: "string"
       field:
+        type: "string"
+  SwdGroup:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      stat:
         type: "string"
   ApiResponse:
     type: "object"
