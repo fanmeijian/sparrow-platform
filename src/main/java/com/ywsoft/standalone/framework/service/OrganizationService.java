@@ -39,6 +39,11 @@ public class OrganizationService {
 	}
 	
 	
+	@DeleteMapping("/organizationRelation")
+	public void delRelation(@RequestBody SwdOrganizationRelationPK id) {
+		organizationRelationRepository.deleteById(id);
+	}
+	
 	/**
 	 * 获取关联组织列表
 	 * @param organizationId

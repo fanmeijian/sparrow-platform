@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "一个针对企业内部的组织架构、系统权限的管理平台。 业务原理可参考文章 [组织权限管理平台的设计与实现](https://mp.weixin.qq.com/s/h8aS_i3CTvkACsBYgqUipw)。可以使用api key `special-key`来测试本应哟个。"
+  description: "一个针对企业内部的组织架构、系统权限的管理平台。 业务原理可参考文章 [组织权限管理平台的设计与实现](https://mp.weixin.qq.com/s/h8aS_i3CTvkACsBYgqUipw)。可以使用Authorization `Authorization-token`来测试本应用。"
   version: "1.0.0"
   title: "组织权限管理"
   contact:
@@ -9,7 +9,7 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "localhost:6060"
-basePath: "/api"
+basePath: "/"
 tags:
 - name: "组织"
 - name: "组织单元"
@@ -27,14 +27,55 @@ tags:
 
 
 schemes:
-- "https"
 - "http"
 paths:
   /swdOrganizations:
+    get:
+      tags: 
+      - "组织"
+      summary: "返回所有组织列表"
+      parameters:
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfOrganization"
+      security:
+      - Authorization: []
     post:
       tags:
       - "组织"
+      summary: "创建一个组织"
       parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdOrganization"
+      responses:
+        "201":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdOrganization"
+      security:
+      - Authorization: []
+  /swdOrganizations/{id}:
+    put:
+      tags:
+      - "组织"
+      summary: "更新组织"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
       - in: "body"
         name: "body"
         required: true
@@ -46,38 +87,11 @@ paths:
           schema:
             $ref: "#/definitions/SwdOrganization"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-  /swdOrganizations/{id}:
-    put:
-      tags:
-      - "组织"
-      parameters:
-      - name: "id"
-        in: "path"
-        required: true
-        type: "integer"
-        format: "int64"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/SwdOrganization"
-      responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
-        "405":
-          description: "Validation exception"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
     get:
       tags:
       - "组织"
+      summary: "获取组织详情"
       parameters:
       - name: "id"
         in: "path"
@@ -86,37 +100,26 @@ paths:
         format: "int64"
       responses:
         "200":
-          description: "successful operation"
+          description: "成功"
           schema:
-            $ref: "#/definitions/SwdOrganization"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+            $ref: "#/definitions/SwdOrganizationRep"
       security:
-      - api_key: []
+      - Authorization: []
     delete:
       tags:
       - "组织"
+      summary: "删除组织"
       parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
       - name: "id"
         in: "path"
         required: true
         type: "integer"
         format: "int64"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+        "204":
+          description: "成功"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
   /organizationRelation:
     post:
       tags: 
@@ -130,14 +133,48 @@ paths:
           $ref: "#/definitions/SwdOrganizationRelation"
       responses:
         "200":
-          description: "添加成功"
+          description: "成功"
           schema:
             $ref: "#/definitions/SwdOrganizationRelation"
-    
+      security:
+      - Authorization: []
+    delete:
+      tags: 
+      - "组织"
+      summary: "删除组织关系"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdOrganizationRelationPK"
+      responses:
+        "204":
+          description: "成功"
+      security:
+      - Authorization: []
+  /relatedOrganization/{id}:
+    get:
+      tags: 
+      - "组织"
+      summary: "获取指定组织的关联组织"
+      parameters:
+      - in: "path"
+        name: "id"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "添加成功"
+          schema:
+            $ref: "#/definitions/arrayOfRelatedOrganization"
+      security:
+      - Authorization: []
   /swdUnits:
     post:
       tags:
       - "组织单元"
+      summary: "创建组织单元"
       parameters:
       - in: "body"
         name: "body"
@@ -145,14 +182,28 @@ paths:
         schema:
           $ref: "#/definitions/SwdUnit"
       responses:
-        "200":
-          description: "添加成功"
+        "201":
+          description: "成功"
           schema:
             $ref: "#/definitions/SwdUnit"
+      security:
+      - Authorization: []
+    get:
+      tags:
+      - "组织单元"
+      summary: "获取组织单元列表"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdUnit"
+      security:
+      - Authorization: []
   /swdUnits/{id}:
     put:
       tags:
       - "组织单元"
+      summary: "更新组织单元"
       parameters:
       - name: "id"
         in: "path"
@@ -168,9 +219,12 @@ paths:
           description: "成功"
           schema:
             $ref: "#/definitions/SwdUnit"
+      security:
+      - Authorization: []
     get:
       tags:
       - "组织单元"
+      summary: "获取组织单元详情"
       parameters:
       - name: "id"
         in: "path"
@@ -180,18 +234,23 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdUnit"
+            $ref: "#/definitions/SwdUnitRep"
+      security:
+      - Authorization: []
     delete:
       tags:
       - "组织单元"
+      summary: "删除组织单元"
       parameters:
       - name: "id"
         in: "path"
         required: true
         type: "string"
       responses:
-        "200":
+        "204":
           description: "成功"
+      security:
+      - Authorization: []
   /swdRoles:
     post:
       tags:
@@ -1067,6 +1126,10 @@ securityDefinitions:
     type: "apiKey"
     name: "api_key"
     in: "header"
+  Authorization:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
 definitions:
   SwdOrganization:
     type: "object"
@@ -1079,9 +1142,99 @@ definitions:
         type: "string"
       stat:
         type: "integer"
-        format: "int32"
-    xml:
-      name: "SwdOrganization"
+        description: "1:未生效\n2:生效\n3:失效"
+  SwdOrganizationRep:
+    type: object
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+      stat:
+        type: number
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdOrganization:
+            type: object
+            properties:
+              href:
+                type: string
+  arrayOfRelatedOrganization:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: object
+          properties:
+            organizationId:
+              type: string
+            tartgetId:
+              type: string
+        relation:
+          type: number
+  arrayOfOrganization:
+    type: object
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdOrganizations:
+            type: array
+            items:
+              type: object
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                stat:
+                  type: number
+                _links:
+                  type: object
+                  properties:
+                    self:
+                      type: object
+                      properties:
+                        href:
+                          type: string
+                    swdOrganization:
+                      type: object
+                      properties:
+                        href:
+                          type: string
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+              templated:
+                type: boolean
+          profile:
+            type: object
+            properties:
+              href:
+                type: string
+      page:
+        type: object
+        properties:
+          size:
+            type: number
+          totalElements:
+            type: number
+          totalPages:
+            type: number
+          number:
+            type: number
   SwdOrganizationRelation:
     type: "object"
     properties:
@@ -1089,6 +1242,7 @@ definitions:
         $ref: "#/definitions/SwdOrganizationRelationPK"
       relation:
         type: "integer"
+        description: "1:全资子公司\n2:股权投资"
   SwdOrganizationRelationPK:
     type: "object"
     properties:
@@ -1108,6 +1262,97 @@ definitions:
       stat:
         type: "integer"
         format: "int32"
+  arrayOfSwdUnit:
+    type: object
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdUnits:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                parentId:
+                  type: object
+                  properties:
+                    stat:
+                      type: number
+                    _links:
+                      type: object
+                      properties:
+                        self:
+                          type: object
+                          properties:
+                            href:
+                              type: string
+                        swdUnit:
+                          type: object
+                          properties:
+                            href:
+                              type: string
+                        swdOrganization:
+                          type: object
+                          properties:
+                            href:
+                              type: string
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+              templated:
+                type: boolean
+          profile:
+            type: object
+            properties:
+              href:
+                type: string
+      page:
+        type: object
+        properties:
+          size:
+            type: number
+          totalElements:
+            type: number
+          totalPages:
+            type: number
+          number:
+            type: number
+  SwdUnitRep:
+    type: object
+    properties:
+      name:
+        type: string
+      parentId:
+        type: object
+        properties:
+          stat:
+            type: number
+          _links:
+            type: object
+            properties:
+              self:
+                type: object
+                properties:
+                  href:
+                    type: string
+              swdUnit:
+                type: object
+                properties:
+                  href:
+                    type: string
+              swdOrganization:
+                type: object
+                properties:
+                  href:
+                    type: string
+
   SwdRole:
     type: "object"
     properties:
