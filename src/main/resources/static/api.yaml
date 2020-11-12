@@ -255,6 +255,7 @@ paths:
     post:
       tags:
       - "岗位"
+      summary: "创建一个新岗位"
       parameters:
       - in: "body"
         name: "body"
@@ -267,9 +268,18 @@ paths:
           schema:
             $ref: "#/definitions/SwdRole"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
+    get:
+      tags:
+      - "岗位"
+      summary: "获取所有岗位列表"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdRole"
+      security:
+      - Authorization: []
   /swdRoles/{id}:
     put:
       tags:
