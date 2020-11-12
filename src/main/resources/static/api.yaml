@@ -883,6 +883,97 @@ paths:
           description: "成功"
           schema:
             $ref: "#/definitions/SwdFile"
+  /dataPermission:
+    get:
+      tags: 
+      - "数据权限"
+      description: "列出所有的数据权限"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdDataPermission"
+    put:
+      tags: 
+      - "数据权限"
+      description: "更新的数据权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdDataPermission"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdDataPermission"
+    delete:
+      tags: 
+      - "数据权限"
+      description: "删除数据权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdDataPermissionPK"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+  /fields:
+    get:
+      tags: 
+      - "字段权限"
+      description: "列出所有的字段权限"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdField"
+    put:
+      tags: 
+      - "字段权限"
+      description: "更新字段权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdField"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdField"
+    post:
+      tags: 
+      - "字段权限"
+      description: "创建字段权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdField"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdField"
+    delete:
+      tags: 
+      - "字段权限"
+      description: "删除字段权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdFieldPK"
+          required: true
+      responses:
+        "200":
+          description: "成功"
 securityDefinitions:
   petstore_auth:
     type: "oauth2"
@@ -1034,6 +1125,40 @@ definitions:
       fileId:
         type: "string"
       permission:
+        type: "string"
+  SwdDataPermission:
+    type: "object"
+    properties:
+      id:
+        type: "object"
+        $ref: "#/definitions/SwdDataPermissionPK"
+      permissionEl:
+        type: "string"
+  SwdDataPermissionPK:
+    type: "object"
+    properties:
+      permission:
+        type: "string"
+      pkey:
+        type: "string"
+      model:
+        type: "string"
+  SwdField:
+    type: "object"
+    properties:
+      id:
+        type: "object"
+        $ref: "#/definitions/SwdFieldPK"
+      fieldName:
+        type: "string"
+      modelName:
+        type: "string"
+  SwdFieldPK:
+    type: "object"
+    properties:
+      model:
+        type: "string"
+      field:
         type: "string"
   ApiResponse:
     type: "object"
