@@ -19,10 +19,11 @@ tags:
 - name: "人员"
 - name: "菜单"
 - name: "功能"
+- name: "系统角色"
 - name: "页面元素"
-- name: "文件"
-- name: "数据"
-- name: "字段"
+- name: "文件权限"
+- name: "数据权限"
+- name: "字段权限"
 
 
 schemes:
@@ -452,6 +453,436 @@ paths:
       - petstore_auth:
         - "write:pets"
         - "read:pets"
+  /swdMenus:
+    post:
+      tags:
+      - "菜单"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdMenu"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdMenu"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /swdMenus/{id}:
+    put:
+      tags:
+      - "菜单"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdMenu"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    get:
+      tags:
+      - "菜单"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdMenu"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "菜单"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /menuTrees : 
+    get:
+      tags:
+      - "菜单"
+      description: "以树的形式返回所有菜单"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdAuthority"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdAuthority"
+  /userMenuTrees : 
+    get:
+      tags:
+      - "菜单"
+      description: "返回当前登录用户的所有菜单"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdAuthority"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdAuthority"
+  /sysroleMenuTrees : 
+    get:
+      tags:
+      - "菜单"
+      description: "返回指定系统角色的所有菜单"
+      parameters:
+      - in: "query"
+        name: "sysroleId"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdAuthority"
+  /swdSysroles/{sysroleId}/swdMenus : 
+    get:
+      tags:
+      - "菜单"
+      description: "返回指定系统角色的所有菜单"
+      parameters:
+      - in: "path"
+        name: "sysroleId"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdAuthority"
+  /swdAuthorites:
+    post:
+      tags:
+      - "功能"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdAuthority"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdAuthority"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /authoritiesWithCheckBySysrole : 
+    get:
+      tags:
+      - "功能"
+      description: "返回指定系统角色所拥有的功能权限，含checked值"
+      parameters:
+      - name: "sysroleId"
+        in: "query"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdAuthority"
+  /swdAuthorites/{id}:
+    put:
+      tags:
+      - "功能"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdAuthority"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    get:
+      tags:
+      - "功能"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdAuthority"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "功能"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /swdSysroles:
+    post:
+      tags:
+      - "系统角色"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdSysrole"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdSysrole"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /swdSysroles/{id}:
+    put:
+      tags:
+      - "系统角色"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/SwdSysrole"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    get:
+      tags:
+      - "系统角色"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdSysrole"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "系统角色"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /files:
+    get:
+      tags:
+      - "文件权限"
+      description: "返回所有文件列表"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdFile"
+    post:
+      tags:
+      - "文件权限"
+      description: "上传文件"
+      consumes:
+      - multipart/form-data
+      parameters:
+        - name: "file"
+          in: "formData"
+          type: "file"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdFile"
+  /myFiles:
+    get:
+      tags:
+      - "文件权限"
+      description: "返回当前用户所有的含有LIST权限，和匿名及认证用户可以查看的文件"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdFile"
+  /filePermission:
+    post:
+      tags: 
+      - "文件权限"
+      description: "为某个用户授予文件权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/SwdUserFilePK"
+      responses:
+        "200":
+          description: "成功"
+  /userFilePermission/{fileId}:
+    get:
+      tags: 
+      - "文件权限"
+      description: "返回指定文件所授予的用户的权限列表"
+      parameters:
+        - name: "fileId"
+          in: "path"
+          type: "integer"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+  /sysroleFilePermission/{fileId}:
+    get:
+      tags:
+      - "文件权限"
+      description: "返回指定文件所授予权限的角色列表"
+      parameters:
+        - name: "fileId"
+          in: "path"
+          type: "integer"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+  /files/{fileId}:
+    get:
+      tags:
+      - "文件权限"
+      description: "下载指定文件，同时会检查当前用户是否有下载权限"
+      parameters:
+        - name: "fileId"
+          in: "path"
+          type: "integer"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdFile"
 securityDefinitions:
   petstore_auth:
     type: "oauth2"
@@ -540,6 +971,70 @@ definitions:
         type: "string"
       swdUnit:
         $ref: "#/definitions/SwdUnit"
+  SwdMenu:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      parentId:
+        type: "integer"
+      url: 
+        type : "string"
+  SwdAuthority:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      authority:
+        type: "string"
+      url: 
+        type : "string"
+  SwdSysrole:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+  SwdFile:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      hash:
+        type: "string"
+      name:
+        type: "string"
+      url:
+        type: "string"
+  SwdUserFilePK:
+    type: "object"
+    properties:
+      id:
+        type: "object"
+      sysroleName:
+        type: "string"
+      permission:
+        type: "string"
+        description: "permission{LIST, EDIT, READ, DELETE, DOWNLOAD}"
+  SysroleFile:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      fileId:
+        type: "string"
+  SwdSysroleFilePK:
+    type: "object"
+    properties:
+      sysroleId:
+        type: "string"
+      fileId:
+        type: "string"
+      permission:
+        type: "string"
   ApiResponse:
     type: "object"
     properties:
