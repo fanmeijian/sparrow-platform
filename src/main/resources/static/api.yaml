@@ -16,7 +16,7 @@ tags:
 - name: "岗位"
 - name: "职级"
 - name: "群组"
-- name: "人员"
+- name: "员工"
 - name: "菜单"
 - name: "功能"
 - name: "系统角色"
@@ -263,10 +263,10 @@ paths:
         schema:
           $ref: "#/definitions/SwdRole"
       responses:
-        "200":
+        "201":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdRole"
+            $ref: "#/definitions/SwdRoleRep"
       security:
       - Authorization: []
     get:
@@ -277,13 +277,14 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdRole"
+            $ref: "#/definitions/arrayOfSwdRole"
       security:
       - Authorization: []
   /swdRoles/{id}:
     put:
       tags:
       - "岗位"
+      summary: "更新指定岗位"
       parameters:
       - name: "id"
         in: "path"
@@ -296,19 +297,14 @@ paths:
         schema:
           $ref: "#/definitions/SwdRole"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
-        "405":
-          description: "Validation exception"
+        "200":
+          description: "成功"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
     get:
       tags:
       - "岗位"
+      summary: "获取指定岗位信息"
       parameters:
       - name: "id"
         in: "path"
@@ -319,39 +315,29 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdRole"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+            $ref: "#/definitions/SwdRoleRep"
       security:
-      - api_key: []
+      - Authorization: []
     delete:
       tags:
       - "岗位"
+      summary: "删除指定岗位"
       parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
       - name: "id"
         in: "path"
         required: true
         type: "integer"
         format: "int64"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+        "204":
+          description: "成功"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
   /swdLevels:
     post:
       tags:
       - "职级"
+      summary: "创建职级"
       parameters:
       - in: "body"
         name: "body"
@@ -359,18 +345,28 @@ paths:
         schema:
           $ref: "#/definitions/SwdLevel"
       responses:
-        "200":
+        "201":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdLevel"
+            $ref: "#/definitions/SwdLevelRep"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
+    get:
+      tags:
+      - "职级"
+      summary: "获取所有职级列表"
+      responses:
+        "201":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdLevel"
+      security:
+      - Authorization: []
   /swdLevels/{id}:
     put:
       tags:
       - "职级"
+      summary: "更新指定职级"
       parameters:
       - name: "id"
         in: "path"
@@ -383,19 +379,16 @@ paths:
         schema:
           $ref: "#/definitions/SwdLevel"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
-        "405":
-          description: "Validation exception"
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdLevelRep"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
     get:
       tags:
       - "职级"
+      summary: "获取指定职级信息"
       parameters:
       - name: "id"
         in: "path"
@@ -406,87 +399,74 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdLevel"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+            $ref: "#/definitions/SwdLevelRep"
       security:
-      - api_key: []
+      - Authorization: []
     delete:
       tags:
       - "职级"
+      summary: "删除指定职级"
       parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
       - name: "id"
         in: "path"
         required: true
         type: "integer"
         format: "int64"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+        "204":
+          description: "成功"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
   /swdGroups:
     get:
       tags:
       - "群组"
+      summary: "获取所有群组列表"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdGroup"
-  /swdGroups/{id}:
+            $ref: "#/definitions/arrayOfSwdGroup"
+      security:
+      - Authorization: []
     post:
       tags:
       - "群组"
+      summary: "创建群组"
       parameters:
-      - name: "id"
-        in: "path"
-        type: "integer"
+      - in: "body"
+        name: "body"
         required: true
+        schema:
+          $ref: "#/definitions/SwdGroup"
       responses:
-        "200":
+        "201":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdGroup"
-    put:
-      tags:
-      - "群组"
-      parameters:
-      - name: "id"
-        in: "path"
-        type: "integer"
-        required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/SwdGroup"
-    delete:
-      tags:
-      - "群组"
-      parameters:
-      - name: "id"
-        in: "path"
-        type: "integer"
-        required: true
-      responses:
-        "200":
-          description: "成功"
-  /groupMember/{id}:
+            $ref: "#/definitions/SwdGroupRep"
+      security:
+      - Authorization: []
+  /swdGroups/{id}:
     get:
       tags:
       - "群组"
-      description: "返回指定组包含的所有成员，群组"
+      summary: "获取指定群组信息"
+      parameters:
+      - name: "id"
+        in: "path"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdGroupRep"
+      security:
+      - Authorization: []
+    put:
+      tags:
+      - "群组"
+      summary: "更新指定群组"
       parameters:
       - name: "id"
         in: "path"
@@ -501,7 +481,40 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdGroup"
+            $ref: "#/definitions/SwdGroupRep"
+      security:
+      - Authorization: []
+    delete:
+      tags:
+      - "群组"
+      summary: "删除指定群组"
+      parameters:
+      - name: "id"
+        in: "path"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+      security:
+      - Authorization: []
+  /groupMember/{id}:
+    get:
+      tags:
+      - "群组"
+      description: "返回指定组包含的所有成员，群组"
+      parameters:
+      - name: "id"
+        in: "path"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/groupMembers"
+      security:
+      - Authorization: []
     put:
       tags:
       - "群组"
@@ -519,7 +532,8 @@ paths:
   /swdEmployees:
     post:
       tags:
-      - "人员"
+      - "员工"
+      summary: "创建员工"
       parameters:
       - in: "body"
         name: "body"
@@ -527,18 +541,28 @@ paths:
         schema:
           $ref: "#/definitions/SwdEmployee"
       responses:
-        "200":
+        "201":
           description: "成功"
           schema:
             $ref: "#/definitions/SwdEmployee"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
+    get:
+      tags:
+      - "员工"
+      summary: "获取所有员工列表"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdEmployee"
+      security:
+      - Authorization: []
   /swdEmployees/{id}:
     put:
       tags:
-      - "人员"
+      - "员工"
+      summary: "更新员工信息"
       parameters:
       - name: "id"
         in: "path"
@@ -551,58 +575,39 @@ paths:
         schema:
           $ref: "#/definitions/SwdEmployee"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
-        "405":
-          description: "Validation exception"
+        "200":
+          description: "成功"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
     get:
       tags:
-      - "人员"
+      - "员工"
+      summary: "获取指定员工信息"
       parameters:
       - name: "id"
         in: "path"
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdEmployee"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+            $ref: "#/definitions/SwdEmployeeRep"
       security:
-      - api_key: []
+      - Authorization: []
     delete:
       tags:
-      - "人员"
+      - "员工"
       parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
       - name: "id"
         in: "path"
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+        "204":
+          description: "成功"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
   /swdMenus:
     post:
       tags:
@@ -619,9 +624,7 @@ paths:
           schema:
             $ref: "#/definitions/SwdMenu"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
   /swdMenus/{id}:
     put:
       tags:
@@ -645,9 +648,7 @@ paths:
         "405":
           description: "Validation exception"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
     get:
       tags:
       - "菜单"
@@ -667,7 +668,7 @@ paths:
         "404":
           description: "Pet not found"
       security:
-      - api_key: []
+      - Authorization: []
     delete:
       tags:
       - "菜单"
@@ -687,9 +688,7 @@ paths:
         "404":
           description: "Pet not found"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
   /menuTrees : 
     get:
       tags:
@@ -768,9 +767,7 @@ paths:
           schema:
             $ref: "#/definitions/SwdAuthority"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
   /authoritiesWithCheckBySysrole : 
     get:
       tags:
@@ -810,9 +807,7 @@ paths:
         "405":
           description: "Validation exception"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
     get:
       tags:
       - "功能"
@@ -832,7 +827,7 @@ paths:
         "404":
           description: "Pet not found"
       security:
-      - api_key: []
+      - Authorization: []
     delete:
       tags:
       - "功能"
@@ -852,9 +847,7 @@ paths:
         "404":
           description: "Pet not found"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
   /swdSysroles:
     post:
       tags:
@@ -871,9 +864,7 @@ paths:
           schema:
             $ref: "#/definitions/SwdSysrole"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
   /swdSysroles/{id}:
     put:
       tags:
@@ -897,9 +888,7 @@ paths:
         "405":
           description: "Validation exception"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
     get:
       tags:
       - "系统角色"
@@ -919,7 +908,7 @@ paths:
         "404":
           description: "Pet not found"
       security:
-      - api_key: []
+      - Authorization: []
     delete:
       tags:
       - "系统角色"
@@ -939,9 +928,7 @@ paths:
         "404":
           description: "Pet not found"
       security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - Authorization: []
   /files:
     get:
       tags:
@@ -1125,17 +1112,6 @@ paths:
         "200":
           description: "成功"
 securityDefinitions:
-  petstore_auth:
-    type: "oauth2"
-    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:pets: "modify pets in your account"
-      read:pets: "read your pets"
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
   Authorization:
     type: "apiKey"
     name: "Authorization"
@@ -1362,7 +1338,6 @@ definitions:
                 properties:
                   href:
                     type: string
-
   SwdRole:
     type: "object"
     properties:
@@ -1375,6 +1350,52 @@ definitions:
       stat:
         type: "integer"
         format: "int32"
+  SwdRoleRep:
+    type: object
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+      stat:
+        type: number
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdRole:
+            type: object
+            properties:
+              href:
+                type: string
+  arrayOfSwdRole:
+    type: object
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdRoles:
+            type: array
+            items:
+              $ref: "#/definitions/SwdRoleRep"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          profile:
+            type: object
+            properties:
+              href:
+                type: string
+
   SwdLevel:
     type: "object"
     properties:
@@ -1387,6 +1408,52 @@ definitions:
       stat:
         type: "integer"
         format: "int32"
+  SwdLevelRep:
+    type: object
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+      stat:
+        type: number
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdLevel:
+            type: object
+            properties:
+              href:
+                type: string
+  arrayOfSwdLevel:
+    type: object
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdLevels:
+            type: array
+            items:
+              $ref: "#/definitions/SwdLevelRep"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          profile:
+            type: object
+            properties:
+              href:
+                type: string
+  
   SwdEmployee:
     type: "object"
     properties:
@@ -1398,6 +1465,58 @@ definitions:
         type: "string"
       swdUnit:
         $ref: "#/definitions/SwdUnit"
+  arrayOfSwdEmployee:
+    type: "object"
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdEmployees:
+            type: array
+            items:
+              $ref: "#/definitions/SwdEmployee"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          profile:
+            type: object
+            properties:
+              href:
+                type: string
+  SwdEmployeeRep:
+    type: object
+    properties:
+      employeeno:
+        type: string
+      stat:
+        type: string
+      uplineManager:
+        $ref: "#/definitions/SwdEmployee"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdEmployee:
+            type: object
+            properties:
+              href:
+                type: string
+          swdUnit:
+            type: object
+            properties:
+              href:
+                type: string
+
+
   SwdMenu:
     type: "object"
     properties:
@@ -1504,6 +1623,84 @@ definitions:
       name:
         type: "string"
       stat:
+        type: "string"
+      owner:
+        $ref: "#/definitions/SwdEmployee"
+  SwdGroupRep:
+    type: object
+    properties:
+      name:
+        type: string
+      stat:
+        type: string
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdGroup:
+            type: object
+            properties:
+              href:
+                type: string
+          owner:
+            type: object
+            properties:
+              href:
+                type: string
+  arrayOfSwdGroup:
+    type: object
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdGroups:
+            type: array
+            items:
+              $ref: "#/definitions/SwdGroupRep"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          profile:
+            type: object
+            properties:
+              href:
+                type: string
+  groupMembers:
+    type: object
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      stat:
+        type: "string"
+      owner:
+        $ref: "#/definitions/SwdEmployee"
+      subGroups:
+        type: array
+        items:
+          $ref: "#/definitions/SwdGroup"
+      groupUser:
+        type: array
+        items:
+          $ref: "#/definitions/SwdUser"
+  SwdUser:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      enabled:
+        type: "boolean"
+      password:
         type: "string"
   ApiResponse:
     type: "object"

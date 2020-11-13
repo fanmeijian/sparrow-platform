@@ -24,7 +24,7 @@ public class SwdGroup implements Serializable {
 
 	//uni-directional many-to-one association to SwdEmployee
 	@ManyToOne
-	@JoinColumn(name="OWNER")
+	@JoinColumn(name="OWNER",updatable=false,insertable=false)
 	private SwdEmployee owner;
 
 	public SwdGroup() {
