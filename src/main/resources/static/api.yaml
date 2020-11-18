@@ -598,6 +598,7 @@ paths:
     delete:
       tags:
       - "员工"
+      summary: "删除员工"
       parameters:
       - name: "id"
         in: "path"
@@ -612,6 +613,7 @@ paths:
     post:
       tags:
       - "菜单"
+      summary: "新增菜单"
       parameters:
       - in: "body"
         name: "body"
@@ -619,16 +621,28 @@ paths:
         schema:
           $ref: "#/definitions/SwdMenu"
       responses:
+        "201":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdMenuRep"
+      security:
+      - Authorization: []
+    get:
+      tags:
+      - "菜单"
+      summary: "获取所有菜单"
+      responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdMenu"
+            $ref: "#/definitions/arrayOfSwdMenu"
       security:
       - Authorization: []
   /swdMenus/{id}:
     put:
       tags:
       - "菜单"
+      summary: "更新菜单"
       parameters:
       - name: "id"
         in: "path"
@@ -641,17 +655,16 @@ paths:
         schema:
           $ref: "#/definitions/SwdMenu"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
-        "405":
-          description: "Validation exception"
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdMenuRep"
       security:
       - Authorization: []
     get:
       tags:
       - "菜单"
+      summary: "获取菜单详情"
       parameters:
       - name: "id"
         in: "path"
@@ -662,70 +675,55 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdMenu"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+            $ref: "#/definitions/SwdMenuRep"
       security:
       - Authorization: []
     delete:
       tags:
       - "菜单"
+      summary: "删除菜单"
       parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
       - name: "id"
         in: "path"
         required: true
         type: "integer"
-        format: "int64"
       responses:
-        "400":
+        "204":
           description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
       security:
       - Authorization: []
   /menuTrees : 
     get:
       tags:
       - "菜单"
-      description: "以树的形式返回所有菜单"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/SwdAuthority"
+      summary: "获取所有菜单树"
+      description: "以树的形式返回所有菜单，children为menuTree本身的递归"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdAuthority"
+            $ref: "#/definitions/arrayOfMenuTree"
+      security:
+      - Authorization: []
   /userMenuTrees : 
     get:
       tags:
       - "菜单"
-      description: "返回当前登录用户的所有菜单"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/SwdAuthority"
+      summary: "获取用户菜单树"
+      description: "返回当前登录用户的所有菜单,children为menutree对象"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdAuthority"
+            $ref: "#/definitions/arrayOfMenuTree"
+      security:
+      - Authorization: []
   /sysroleMenuTrees : 
     get:
       tags:
       - "菜单"
-      description: "返回指定系统角色的所有菜单"
+      summary: "返回指定角色的菜单树"
+      description: "返回指定系统角色的所有菜单，children为menutree对象"
       parameters:
       - in: "query"
         name: "sysroleId"
@@ -735,12 +733,17 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdAuthority"
+            $ref: "#/definitions/arrayOfMenuTree"
+        "403":
+          description: "无权限"
+      security:
+      - Authorization: []
   /swdSysroles/{sysroleId}/swdMenus : 
     get:
       tags:
       - "菜单"
-      description: "返回指定系统角色的所有菜单"
+      summary: "返回指定角色下的菜单列表"
+      description: "返回指定系统角色的所有菜单,不是树的形式"
       parameters:
       - in: "path"
         name: "sysroleId"
@@ -750,11 +753,16 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdAuthority"
-  /swdAuthorites:
+            $ref: "#/definitions/arrayOfSwdMenu"
+        "403":
+          description: "无权限"
+      security:
+      - Authorization: []
+  /swdAuthorities:
     post:
       tags:
       - "功能"
+      summary: "新建功能"
       parameters:
       - in: "body"
         name: "body"
@@ -762,16 +770,28 @@ paths:
         schema:
           $ref: "#/definitions/SwdAuthority"
       responses:
+        "201":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdAuthorityRep"
+      security:
+      - Authorization: []
+    get:
+      tags:
+      - "功能"
+      summary: "获取所有功能列表"
+      responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdAuthority"
+            $ref: "#/definitions/arrayOfAuthority"
       security:
       - Authorization: []
   /authoritiesWithCheckBySysrole : 
     get:
       tags:
       - "功能"
+      summary: "获取指定角色下的功能列表，含checked值"
       description: "返回指定系统角色所拥有的功能权限，含checked值"
       parameters:
       - name: "sysroleId"
@@ -783,75 +803,66 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdAuthority"
+            $ref: "#/definitions/arrayOfAuthorityCheck"
+      security:
+      - Authorization: []
   /swdAuthorites/{id}:
     put:
       tags:
       - "功能"
+      summary: "更新功能"
       parameters:
       - name: "id"
         in: "path"
         required: true
         type: "integer"
-        format: "int64"
       - in: "body"
         name: "body"
         required: true
         schema:
           $ref: "#/definitions/SwdAuthority"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
-        "405":
-          description: "Validation exception"
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdAuthorityRep"
       security:
       - Authorization: []
     get:
       tags:
       - "功能"
+      summary: "获取指定功能信息"
       parameters:
       - name: "id"
         in: "path"
         required: true
         type: "integer"
-        format: "int64"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdAuthority"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+            $ref: "#/definitions/SwdAuthorityRep"
       security:
       - Authorization: []
     delete:
       tags:
       - "功能"
+      summary: "删除功能"
       parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
       - name: "id"
         in: "path"
         required: true
         type: "integer"
-        format: "int64"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+        "204":
+          description: "成功"
       security:
       - Authorization: []
   /swdSysroles:
     post:
       tags:
       - "系统角色"
+      summary: "创建系统角色"
       parameters:
       - in: "body"
         name: "body"
@@ -859,90 +870,91 @@ paths:
         schema:
           $ref: "#/definitions/SwdSysrole"
       responses:
+        "201":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdSysroleRep"
+      security:
+      - Authorization: []
+    get:
+      tags:
+      - "系统角色"
+      summary: "获取所有系统角色"
+      responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdSysrole"
+            $ref: "#/definitions/arrayOfSwdSysrole"
       security:
       - Authorization: []
   /swdSysroles/{id}:
     put:
       tags:
       - "系统角色"
+      summary: "更新系统角色"
       parameters:
       - name: "id"
         in: "path"
         required: true
         type: "integer"
-        format: "int64"
       - in: "body"
         name: "body"
         required: true
         schema:
           $ref: "#/definitions/SwdSysrole"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
-        "405":
-          description: "Validation exception"
+        "200":
+          description: "成功"
+          schema: 
+            $ref: "#/definitions/SwdSysroleRep"
       security:
       - Authorization: []
     get:
       tags:
       - "系统角色"
+      summary: "获取系统角色信息"
       parameters:
       - name: "id"
         in: "path"
         required: true
         type: "integer"
-        format: "int64"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdSysrole"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+            $ref: "#/definitions/SwdSysroleRep"
       security:
       - Authorization: []
     delete:
       tags:
       - "系统角色"
+      summary: "删除系统角色"
       parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
       - name: "id"
         in: "path"
         required: true
         type: "integer"
-        format: "int64"
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+        "204":
+          description: "成功"
       security:
       - Authorization: []
   /files:
     get:
       tags:
       - "文件权限"
-      description: "返回所有文件列表"
+      summary: "返回所有文件列表"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdFile"
+            $ref: "#/definitions/arrayOfSwdFile"
+      security:
+      - Authorization: []
     post:
       tags:
       - "文件权限"
-      description: "上传文件"
+      summary: "上传文件"
       consumes:
       - multipart/form-data
       parameters:
@@ -955,21 +967,26 @@ paths:
           description: "成功"
           schema:
             $ref: "#/definitions/SwdFile"
+      security:
+      - Authorization: []
   /myFiles:
     get:
       tags:
       - "文件权限"
+      summary: "我的文件列表"
       description: "返回当前用户所有的含有LIST权限，和匿名及认证用户可以查看的文件"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdFile"
+            $ref: "#/definitions/arrayOfSwdFile"
+      security:
+      - Authorization: []
   /filePermission:
     post:
       tags: 
       - "文件权限"
-      description: "为某个用户授予文件权限"
+      summary: "为某个用户授予文件权限"
       parameters:
         - name: "body"
           in: "body"
@@ -979,11 +996,13 @@ paths:
       responses:
         "200":
           description: "成功"
+      security:
+      - Authorization: []
   /userFilePermission/{fileId}:
     get:
       tags: 
       - "文件权限"
-      description: "返回指定文件所授予的用户的权限列表"
+      summary: "返回指定文件所授予的用户的权限列表"
       parameters:
         - name: "fileId"
           in: "path"
@@ -992,11 +1011,15 @@ paths:
       responses:
         "200":
           description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfUserFile"
+      security:
+      - Authorization: []
   /sysroleFilePermission/{fileId}:
     get:
       tags:
       - "文件权限"
-      description: "返回指定文件所授予权限的角色列表"
+      summary: "返回指定文件所授予权限的角色列表"
       parameters:
         - name: "fileId"
           in: "path"
@@ -1005,10 +1028,15 @@ paths:
       responses:
         "200":
           description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSysroleFile"
+      security:
+      - Authorization: []
   /files/{fileId}:
     get:
       tags:
       - "文件权限"
+      summary: "获取指定文件内容"
       description: "下载指定文件，同时会检查当前用户是否有下载权限"
       parameters:
         - name: "fileId"
@@ -1018,22 +1046,24 @@ paths:
       responses:
         "200":
           description: "成功"
-          schema:
-            $ref: "#/definitions/SwdFile"
+      security:
+      - Authorization: []
   /dataPermission:
     get:
       tags: 
       - "数据权限"
-      description: "列出所有的数据权限"
+      summary: "列出所有的数据权限"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdDataPermission"
+            $ref: "#/definitions/arrayOfSwdDataPermission"
+      security:
+      - Authorization: []
     put:
       tags: 
       - "数据权限"
-      description: "更新的数据权限"
+      summary: "更新数据权限"
       parameters:
         - name: "body"
           in: "body"
@@ -1045,10 +1075,29 @@ paths:
           description: "成功"
           schema:
             $ref: "#/definitions/SwdDataPermission"
+      security:
+      - Authorization: []
+    post:
+      tags: 
+      - "数据权限"
+      summary: "更新数据权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdDataPermission"
+          required: true
+      responses:
+        "201":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdDataPermission"
+      security:
+      - Authorization: []
     delete:
       tags: 
       - "数据权限"
-      description: "删除数据权限"
+      summary: "删除数据权限"
       parameters:
         - name: "body"
           in: "body"
@@ -1056,22 +1105,26 @@ paths:
             $ref: "#/definitions/SwdDataPermissionPK"
           required: true
       responses:
-        "200":
+        "204":
           description: "成功"
+      security:
+      - Authorization: []
   /fields:
     get:
       tags: 
       - "字段权限"
-      description: "列出所有的字段权限"
+      summary: "列出所有字段"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdField"
+            $ref: "#/definitions/arrayOfSwdField"
+      security:
+      - Authorization: []
     put:
       tags: 
       - "字段权限"
-      description: "更新字段权限"
+      summary: "更新字段"
       parameters:
         - name: "body"
           in: "body"
@@ -1083,10 +1136,12 @@ paths:
           description: "成功"
           schema:
             $ref: "#/definitions/SwdField"
+      security:
+      - Authorization: []
     post:
       tags: 
       - "字段权限"
-      description: "创建字段权限"
+      summary: "创建字段"
       parameters:
         - name: "body"
           in: "body"
@@ -1098,10 +1153,12 @@ paths:
           description: "成功"
           schema:
             $ref: "#/definitions/SwdField"
+      security:
+      - Authorization: []
     delete:
       tags: 
       - "字段权限"
-      description: "删除字段权限"
+      summary: "删除字段"
       parameters:
         - name: "body"
           in: "body"
@@ -1111,6 +1168,212 @@ paths:
       responses:
         "200":
           description: "成功"
+      security:
+      - Authorization: []
+  /myFieldPermission/{model}:
+    get:
+      tags: 
+      - "字段权限"
+      summary: "当前用户字段权限"
+      description: "根据模型名称"
+      parameters:
+      - name: "model"
+        in: "path"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdField"
+      security:
+      - Authorization: []
+  /myFieldPermission/{model}/{field}:
+    get:
+      tags: 
+      - "字段权限"
+      summary: "当前用户字段权限"
+      description: "根据模型名称和字段名称"
+      parameters:
+      - name: "model"
+        in: "path"
+        type: "string"
+        required: true
+      - name: "field"
+        in: "path"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdField"
+      security:
+      - Authorization: []
+  /myFieldPermission/{model}/{field}/{permission}:
+    get:
+      tags: 
+      - "字段权限"
+      summary: "当前用户字段权限"
+      description: "根据模型名称，字段名称，和权限，判断是否有此权限"
+      parameters:
+      - name: "model"
+        in: "path"
+        type: "string"
+        required: true
+      - name: "field"
+        in: "path"
+        type: "string"
+        required: true
+      - name: "permission"
+        in: "path"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdField"
+      security:
+      - Authorization: []
+  /userFieldPermission/{model}:
+    get:
+      tags: 
+      - "字段权限"
+      summary: "指定用户字段权限"
+      description: "根据模型名称判断是否有此权限"
+      parameters:
+      - name: "model"
+        in: "path"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdField"
+      security:
+      - Authorization: []
+  /fields/{model}/{field}:
+    delete:
+      tags: 
+      - "字段权限"
+      summary: "删除字段"
+      parameters:
+      - name: "model"
+        in: "path"
+        type: "string"
+        required: true
+      - name: "field"
+        in: "path"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdField"
+      security:
+      - Authorization: []
+  /fields/{model}:
+    delete:
+      tags: 
+      - "字段权限"
+      summary: "删除字段"
+      parameters:
+      - name: "model"
+        in: "path"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdField"
+      security:
+      - Authorization: []
+  /userFieldPermission/{model}/{field}:
+    get:
+      tags: 
+      - "字段权限"
+      summary: "当前用户字段权限"
+      parameters:
+      - name: "model"
+        in: "path"
+        type: "string"
+        required: true
+      - name: "field"
+        in: "path"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdField"
+      security:
+      - Authorization: []
+  /userFieldPermission:
+    get:
+      tags: 
+      - "字段权限"
+      summary: "列出所有字段"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdField"
+      security:
+      - Authorization: []
+    put:
+      tags: 
+      - "字段权限"
+      summary: "更新字段权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdField"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdField"
+      security:
+      - Authorization: []
+    post:
+      tags: 
+      - "字段权限"
+      summary: "创建字段权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdField"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdField"
+      security:
+      - Authorization: []
+    delete:
+      tags: 
+      - "字段权限"
+      summary: "删除字段权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdFieldPK"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+      security:
+      - Authorization: []
 securityDefinitions:
   Authorization:
     type: "apiKey"
@@ -1515,8 +1778,6 @@ definitions:
             properties:
               href:
                 type: string
-
-
   SwdMenu:
     type: "object"
     properties:
@@ -1526,8 +1787,73 @@ definitions:
         type: "string"
       parentId:
         type: "integer"
+      sort:
+        type: "integer"
       url: 
         type : "string"
+  SwdMenuRep:
+    type: object
+    properties:
+      name:
+        type: string
+      parentId:
+        type: number
+      sort:
+        type: number
+      url:
+        type: string
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdMenu:
+            type: object
+            properties:
+              href:
+                type: string
+  arrayOfSwdMenu:
+    type: object
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdMenus:
+            type: array
+            items:
+              $ref: "#/definitions/SwdMenuRep"
+      _links:
+        $ref: "#/definitions/_links"
+      page:
+        $ref: "#/definitions/page"
+  menuTree:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      parentId:
+        type: number
+      sort:
+        type: number
+      url:
+        type: string
+      parentString:
+          type: "string"
+      parentIdString:
+        type: "string"
+      children:
+        type: "array"
+        items:
+          $ref: "#/definitions/menuTree"
+  arrayOfMenuTree:
+    type: "array"
+    items:
+      $ref: "#/definitions/menuTree"
   SwdAuthority:
     type: "object"
     properties:
@@ -1535,8 +1861,58 @@ definitions:
         type: "string"
       authority:
         type: "string"
-      url: 
+      uri: 
         type : "string"
+  SwdAuthorityCheck:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      authority:
+        type: "string"
+      uri: 
+        type : "string"
+      checked:
+        type : "boolean"
+  arrayOfAuthorityCheck:
+    type: "array"
+    items:
+      $ref: "#/definitions/SwdAuthorityCheck"
+  SwdAuthorityRep:
+    type: object
+    properties:
+      authority:
+        type: string
+      uri:
+        type: string
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdAuthority:
+            type: object
+            properties:
+              href:
+                type: string
+  arrayOfAuthority:
+    type: object
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdAuthorities:
+            type: array
+            items:
+              $ref: "#/definitions/SwdAuthority"
+      _links:
+        $ref: "#/definitions/_links"
+      page:
+        $ref: "#/definitions/page"
+
   SwdSysrole:
     type: "object"
     properties:
@@ -1544,6 +1920,43 @@ definitions:
         type: "string"
       name:
         type: "string"
+  SwdSysroleRep:
+    type: object
+    properties:
+      name:
+        type: string
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdSysrole:
+            type: object
+            properties:
+              href:
+                type: string
+          swdDataPermissions:
+            type: object
+            properties:
+              href:
+                type: string
+          swdAuthorities:
+            type: object
+            properties:
+              href:
+                type: string
+          swdMenus:
+            type: object
+            properties:
+              href:
+                type: string
+  arrayOfSwdSysrole:
+    type: "array"
+    items:
+      $ref: "#/definitions/SwdSysroleRep"
   SwdFile:
     type: "object"
     properties:
@@ -1555,23 +1968,32 @@ definitions:
         type: "string"
       url:
         type: "string"
+  arrayOfSwdFile:
+    type: "array"
+    items:
+      $ref: "#/definitions/SwdFile"
+    
   SwdUserFilePK:
-    type: "object"
-    properties:
-      id:
-        type: "object"
-      sysroleName:
-        type: "string"
-      permission:
-        type: "string"
-        description: "permission{LIST, EDIT, READ, DELETE, DOWNLOAD}"
-  SysroleFile:
     type: "object"
     properties:
       username:
         type: "string"
       fileId:
         type: "string"
+      permission:
+        type: "string"
+        description: "permission{LIST, EDIT, READ, DELETE, DOWNLOAD}"
+  arrayOfUserFile:
+    type: "array"
+    items:
+      $ref: "#/definitions/SwdUserFilePK"
+  SwdSysroleFile:
+    type: "object"
+    properties:
+      sysroleName:
+        type: "string"
+      id:
+        $ref: "#/definitions/SwdSysroleFilePK"
   SwdSysroleFilePK:
     type: "object"
     properties:
@@ -1581,6 +2003,10 @@ definitions:
         type: "string"
       permission:
         type: "string"
+  arrayOfSysroleFile:
+    type: "array"
+    items:
+      $ref: "#/definitions/SwdSysroleFile"
   SwdDataPermission:
     type: "object"
     properties:
@@ -1598,11 +2024,14 @@ definitions:
         type: "string"
       model:
         type: "string"
+  arrayOfSwdDataPermission:
+    type: "array"
+    items:
+      $ref: "#/definitions/SwdDataPermission"
   SwdField:
     type: "object"
     properties:
       id:
-        type: "object"
         $ref: "#/definitions/SwdFieldPK"
       fieldName:
         type: "string"
@@ -1615,6 +2044,10 @@ definitions:
         type: "string"
       field:
         type: "string"
+  arrayOfSwdField:
+    type: "array"
+    items:
+      $ref: "#/definitions/SwdField"
   SwdGroup:
     type: "object"
     properties:
@@ -1702,6 +2135,52 @@ definitions:
         type: "boolean"
       password:
         type: "string"
+  _links:
+    type: object
+    properties:
+      first:
+        type: object
+        properties:
+          href:
+            type: string
+      self:
+        type: object
+        properties:
+          href:
+            type: string
+          templated:
+            type: boolean
+      next:
+        type: object
+        properties:
+          href:
+            type: string
+      last:
+        type: object
+        properties:
+          href:
+            type: string
+      profile:
+        type: object
+        properties:
+          href:
+            type: string
+      search:
+        type: object
+        properties:
+          href:
+            type: string
+  page:
+    type: object
+    properties:
+      size:
+        type: number
+      totalElements:
+        type: number
+      totalPages:
+        type: number
+      number:
+        type: number
   ApiResponse:
     type: "object"
     properties:
