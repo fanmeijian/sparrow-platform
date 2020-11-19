@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.ywsoft.standalone.framework.entity.SwdAuthority;
 
-public interface AuthorityRepository extends CrudRepository<SwdAuthority, String>,JpaRepository<SwdAuthority, String> {
+public interface AuthorityRepository extends JpaRepository<SwdAuthority, String> {
 	
 	@Query("SELECT s.swdAuthorities FROM SwdUser s WHERE s.username=?1")
 	List<SwdAuthority>findByUsername(String sername);

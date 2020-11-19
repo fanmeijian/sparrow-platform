@@ -2,13 +2,13 @@ package com.ywsoft.standalone.framework.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
 import com.ywsoft.standalone.framework.entity.SwdUserFieldPermission;
 import com.ywsoft.standalone.framework.entity.SwdUserFieldPermissionPK;
 
-public interface UserFieldPermissionRepository extends CrudRepository<SwdUserFieldPermission, SwdUserFieldPermissionPK> {
+public interface UserFieldPermissionRepository extends JpaRepository<SwdUserFieldPermission, SwdUserFieldPermissionPK> {
 
 	@Query("SELECT s FROM SwdUserFieldPermission s WHERE s.id.username=?1 AND s.id.model=?2")
 	List<SwdUserFieldPermission> findByUsernameAndModel(String username, String model);

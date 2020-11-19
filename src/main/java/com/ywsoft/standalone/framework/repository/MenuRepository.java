@@ -10,7 +10,7 @@ import com.ywsoft.standalone.framework.DataPermission;
 import com.ywsoft.standalone.framework.entity.SwdMenu;
 
 
-public interface MenuRepository extends CrudRepository<SwdMenu, String>,JpaRepository<SwdMenu, String> {
+public interface MenuRepository extends JpaRepository<SwdMenu, String> {
 
 	List<SwdMenu> findByParentId(BigInteger i);
 

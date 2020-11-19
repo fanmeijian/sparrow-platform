@@ -11,6 +11,7 @@ info:
 host: "localhost:6060"
 basePath: "/"
 tags:
+- name: "认证"
 - name: "组织"
 - name: "组织单元"
 - name: "岗位"
@@ -29,6 +30,18 @@ tags:
 schemes:
 - "http"
 paths:
+  /oauth2/token:
+    post:
+      tags:
+      - "认证"
+      parameters:
+      - name: "body"
+        in: "body"
+        schema:
+          $ref: "#/definitions/Oauth"
+      responses:
+        "200":
+          description: "成功"
   /swdOrganizations:
     get:
       tags: 
@@ -41,6 +54,10 @@ paths:
       - name: "size"
         in: "query"
         type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向{asc,desc}"
       responses:
         "200":
           description: "成功"
@@ -192,6 +209,17 @@ paths:
       tags:
       - "组织单元"
       summary: "获取组织单元列表"
+      parameters:
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向{asc,desc}"
       responses:
         "200":
           description: "成功"
@@ -273,6 +301,17 @@ paths:
       tags:
       - "岗位"
       summary: "获取所有岗位列表"
+      parameters:
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向{asc,desc}"
       responses:
         "200":
           description: "成功"
@@ -355,6 +394,17 @@ paths:
       tags:
       - "职级"
       summary: "获取所有职级列表"
+      parameters:
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向{asc,desc}"
       responses:
         "201":
           description: "成功"
@@ -422,6 +472,17 @@ paths:
       tags:
       - "群组"
       summary: "获取所有群组列表"
+      parameters:
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向{asc,desc}"
       responses:
         "200":
           description: "成功"
@@ -551,6 +612,17 @@ paths:
       tags:
       - "员工"
       summary: "获取所有员工列表"
+      parameters:
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向{asc,desc}"
       responses:
         "200":
           description: "成功"
@@ -631,6 +703,17 @@ paths:
       tags:
       - "菜单"
       summary: "获取所有菜单"
+      parameters:
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向{asc,desc}"
       responses:
         "200":
           description: "成功"
@@ -780,6 +863,17 @@ paths:
       tags:
       - "功能"
       summary: "获取所有功能列表"
+      parameters:
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向{asc,desc}"
       responses:
         "200":
           description: "成功"
@@ -880,6 +974,17 @@ paths:
       tags:
       - "系统角色"
       summary: "获取所有系统角色"
+      parameters:
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向{asc,desc}"
       responses:
         "200":
           description: "成功"
@@ -1437,53 +1542,11 @@ definitions:
           swdOrganizations:
             type: array
             items:
-              type: object
-              properties:
-                code:
-                  type: string
-                name:
-                  type: string
-                stat:
-                  type: number
-                _links:
-                  type: object
-                  properties:
-                    self:
-                      type: object
-                      properties:
-                        href:
-                          type: string
-                    swdOrganization:
-                      type: object
-                      properties:
-                        href:
-                          type: string
+              $ref: "#/definitions/SwdOrganizationRep"
       _links:
-        type: object
-        properties:
-          self:
-            type: object
-            properties:
-              href:
-                type: string
-              templated:
-                type: boolean
-          profile:
-            type: object
-            properties:
-              href:
-                type: string
+        $ref: "#/definitions/_links"
       page:
-        type: object
-        properties:
-          size:
-            type: number
-          totalElements:
-            type: number
-          totalPages:
-            type: number
-          number:
-            type: number
+        $ref: "#/definitions/page"
   SwdOrganizationRelation:
     type: "object"
     properties:
@@ -1520,59 +1583,11 @@ definitions:
           swdUnits:
             type: array
             items:
-              type: object
-              properties:
-                name:
-                  type: string
-                parentId:
-                  type: object
-                  properties:
-                    stat:
-                      type: number
-                    _links:
-                      type: object
-                      properties:
-                        self:
-                          type: object
-                          properties:
-                            href:
-                              type: string
-                        swdUnit:
-                          type: object
-                          properties:
-                            href:
-                              type: string
-                        swdOrganization:
-                          type: object
-                          properties:
-                            href:
-                              type: string
+              $ref: "#/definitions/SwdUnitRep"
       _links:
-        type: object
-        properties:
-          self:
-            type: object
-            properties:
-              href:
-                type: string
-              templated:
-                type: boolean
-          profile:
-            type: object
-            properties:
-              href:
-                type: string
+        $ref: "#/definitions/_links"
       page:
-        type: object
-        properties:
-          size:
-            type: number
-          totalElements:
-            type: number
-          totalPages:
-            type: number
-          number:
-            type: number
+        $ref: "#/definitions/page"
   SwdUnitRep:
     type: object
     properties:
@@ -1646,19 +1661,9 @@ definitions:
             items:
               $ref: "#/definitions/SwdRoleRep"
       _links:
-        type: object
-        properties:
-          self:
-            type: object
-            properties:
-              href:
-                type: string
-          profile:
-            type: object
-            properties:
-              href:
-                type: string
-
+        $ref: "#/definitions/_links"
+      page: 
+        $ref: "#/definitions/page"
   SwdLevel:
     type: "object"
     properties:
@@ -1704,18 +1709,9 @@ definitions:
             items:
               $ref: "#/definitions/SwdLevelRep"
       _links:
-        type: object
-        properties:
-          self:
-            type: object
-            properties:
-              href:
-                type: string
-          profile:
-            type: object
-            properties:
-              href:
-                type: string
+        $ref: "#/definitions/_links"
+      page: 
+        $ref: "#/definitions/page"
   
   SwdEmployee:
     type: "object"
@@ -1739,18 +1735,9 @@ definitions:
             items:
               $ref: "#/definitions/SwdEmployee"
       _links:
-        type: object
-        properties:
-          self:
-            type: object
-            properties:
-              href:
-                type: string
-          profile:
-            type: object
-            properties:
-              href:
-                type: string
+        $ref: "#/definitions/_links"
+      page: 
+        $ref: "#/definitions/page"
   SwdEmployeeRep:
     type: object
     properties:
@@ -1907,7 +1894,7 @@ definitions:
           swdAuthorities:
             type: array
             items:
-              $ref: "#/definitions/SwdAuthority"
+              $ref: "#/definitions/SwdAuthorityRep"
       _links:
         $ref: "#/definitions/_links"
       page:
@@ -1954,9 +1941,21 @@ definitions:
               href:
                 type: string
   arrayOfSwdSysrole:
-    type: "array"
-    items:
-      $ref: "#/definitions/SwdSysroleRep"
+    type: object
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdSysroles:
+            type: array
+            items:
+              $ref: "#/definitions/SwdSysroleRep"
+          _links:
+            $ref: "#/definitions/_links"
+          page: 
+            $ref: "#/definitions/page"
+
+    
   SwdFile:
     type: "object"
     properties:
@@ -2095,18 +2094,9 @@ definitions:
             items:
               $ref: "#/definitions/SwdGroupRep"
       _links:
-        type: object
-        properties:
-          self:
-            type: object
-            properties:
-              href:
-                type: string
-          profile:
-            type: object
-            properties:
-              href:
-                type: string
+        $ref: "#/definitions/_links"
+      page: 
+        $ref: "#/definitions/page"
   groupMembers:
     type: object
     properties:
@@ -2139,6 +2129,11 @@ definitions:
     type: object
     properties:
       first:
+        type: object
+        properties:
+          href:
+            type: string
+      prev:
         type: object
         properties:
           href:
@@ -2181,6 +2176,13 @@ definitions:
         type: number
       number:
         type: number
+  Oauth:
+    type: "object"
+    properties: 
+      username:
+        type: "string"
+      password:
+        type: "string"
   ApiResponse:
     type: "object"
     properties:
