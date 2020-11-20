@@ -63,6 +63,10 @@ paths:
           description: "成功"
           schema:
             $ref: "#/definitions/arrayOfOrganization"
+        "403":
+          description: "未登录，token过期，无权限"
+          schema:
+            $ref: "#/definitions/Forbidden"
       security:
       - Authorization: []
     post:
@@ -175,6 +179,7 @@ paths:
       tags: 
       - "组织"
       summary: "获取指定组织的关联组织"
+      description: "以树的形式返回，分source和target双向的树"
       parameters:
       - in: "path"
         name: "id"
@@ -184,7 +189,7 @@ paths:
         "200":
           description: "添加成功"
           schema:
-            $ref: "#/definitions/arrayOfRelatedOrganization"
+            $ref: "#/definitions/relatedOrganizationRep"
       security:
       - Authorization: []
   /swdUnits:
@@ -1562,6 +1567,34 @@ definitions:
         type: "string"
       tartgetId:
         type: "string"
+  relatedOrganizationRep:
+    allOf:
+      - $ref: "#/definitions/ApiResponse"
+    properties:
+      data:
+        $ref: "#/definitions/OrganizationExt"
+  OrganizationExt:
+    type: object
+    allOf:
+      - $ref: "#/definitions/SwdOrganization"
+    properties:
+      sources:
+        type: array
+        items:
+          $ref: "#/definitions/OrganizationRelationExt"
+      targets:
+        type: array
+        items:
+          $ref: "#/definitions/OrganizationRelationExt"
+  OrganizationRelationExt:
+    type: "object"
+    properties:
+      organizationExt:
+        $ref: "#/definitions/OrganizationExt"
+      targetExt:
+        $ref: "#/definitions/OrganizationExt"
+      relation:
+        type: "integer"
   SwdUnit:
     type: "object"
     properties:
@@ -2183,12 +2216,24 @@ definitions:
         type: "string"
       password:
         type: "string"
+  Forbidden:
+    type: object
+    properties:
+      timestamp:
+        type: string
+      status:
+        type: number
+      error:
+        type: string
+      message:
+        type: string
+      path:
+        type: string
   ApiResponse:
     type: "object"
     properties:
       code:
         type: "integer"
-        format: "int32"
       type:
         type: "string"
       message:

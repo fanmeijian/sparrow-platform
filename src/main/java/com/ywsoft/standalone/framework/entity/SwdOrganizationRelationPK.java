@@ -15,8 +15,8 @@ public class SwdOrganizationRelationPK implements Serializable {
 	@Column(name="ORGANIZATION_ID", insertable=false, updatable=false)
 	private String organizationId;
 
-	@Column(name="TARTGET_ID", insertable=false, updatable=false)
-	private String tartgetId;
+	@Column(name="TARGET_ID", insertable=false, updatable=false)
+	private String targetId;
 
 	public SwdOrganizationRelationPK() {
 	}
@@ -26,11 +26,11 @@ public class SwdOrganizationRelationPK implements Serializable {
 	public void setOrganizationId(String organizationId) {
 		this.organizationId = organizationId;
 	}
-	public String getTartgetId() {
-		return this.tartgetId;
+	public String getTargetId() {
+		return this.targetId;
 	}
-	public void setTartgetId(String tartgetId) {
-		this.tartgetId = tartgetId;
+	public void setTartgetId(String targetId) {
+		this.targetId = targetId;
 	}
 
 	public boolean equals(Object other) {
@@ -43,14 +43,14 @@ public class SwdOrganizationRelationPK implements Serializable {
 		SwdOrganizationRelationPK castOther = (SwdOrganizationRelationPK)other;
 		return 
 			this.organizationId.equals(castOther.organizationId)
-			&& this.tartgetId.equals(castOther.tartgetId);
+			&& this.targetId.equals(castOther.targetId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
 		hash = hash * prime + this.organizationId.hashCode();
-		hash = hash * prime + this.tartgetId.hashCode();
+		hash = hash * prime + this.targetId.hashCode();
 		
 		return hash;
 	}

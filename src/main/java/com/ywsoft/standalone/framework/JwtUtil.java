@@ -3,28 +3,32 @@ package com.ywsoft.standalone.framework;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.logging.Logger;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ywsoft.standalone.framework.entity.SwdUser;
 import com.ywsoft.standalone.framework.repository.UserRepository;
+import com.ywsoft.standalone.framework.service.ApiResponse;
+import com.ywsoft.standalone.framework.service.ApiResponseError;
+import com.ywsoft.standalone.framework.service.ApiResponseFactory;
+import com.ywsoft.standalone.framework.service.ApiResponseNormal;
+import com.ywsoft.standalone.framework.service.HttpBusinessStatusCode;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import net.minidev.json.JSONObject;
 
 /**
  * 
@@ -37,16 +41,22 @@ import net.minidev.json.JSONObject;
 public class JwtUtil<HttpServletContext> {
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	SwdLogService loginLogService;
-	
+
 	@Autowired
 	HttpServletRequest servletContext;
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
+	@Autowired
+	ApiResponseError apiResponseError;
+
+	@Autowired
+	ApiResponseNormal apiResponseNormal;
+
 	private String SECRET_KEY = "secret";
 
 	public String extractUsername(String token) {
@@ -86,24 +96,30 @@ public class JwtUtil<HttpServletContext> {
 		final String username = extractUsername(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
-	
+
 	@PostMapping("/oauth2/token")
-	public JSONObject token(@RequestBody final SwdUser user) {
-//		Logger.getLogger(this.getClass().toString()).info(user.getUsername());
-		
-		SwdUser dbUser = userRepository.findById(user.getUsername()).orElseGet(null);
-		Assert.notNull(dbUser, "User do not exist!" + user.getUsername());
-		//using BCryptPasswordEncoder to encrypt the password and compare
-//		System.out.println(passwordEncoder.encode(user.getPassword()));
-		Assert.isTrue(passwordEncoder.matches(user.getPassword(), dbUser.getPassword()), "Password do not match!");
-		
-		Map<String,Object> claims=new HashMap<String, Object>();
-		claims.put("scope", "SCOPE_test:any");
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("token", createToken(claims, user.getUsername()));
-		
+	public ApiResponse token(@RequestBody final SwdUser user) {
+		Optional<SwdUser> opticalUser = userRepository.findById(user.getUsername());
+		if (opticalUser.isEmpty())
+			return HttpBusinessStatusCode.USER_NOT_FOUND;
+		SwdUser swdUser = opticalUser.get();
+		if (!passwordEncoder.matches(user.getPassword(), swdUser.getPassword()))
+			return HttpBusinessStatusCode.PASSWORD_NOT_MATCH;
+		Map<String, Object> claims = new HashMap<String, Object>();
 		loginLogService.loginLog(user.getUsername(), servletContext.getRemoteAddr());
-		
-		return jsonObject;
+		return ApiResponseFactory.getNormalReponse(createToken(claims, user.getUsername()));
 	}
+
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "用户不存在")
+	public static class UserNotFoundException extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public UserNotFoundException(String message) {
+			super(message);
+		}
+	}
+
 }
