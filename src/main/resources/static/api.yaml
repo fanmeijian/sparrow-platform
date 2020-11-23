@@ -196,7 +196,8 @@ paths:
     post:
       tags:
       - "组织单元"
-      summary: "创建组织单元"
+      summary: "创建或更新组织单元"
+      description: "swdOrganization字段用这个形式传/1，这个同时也可以更新"
       parameters:
       - in: "body"
         name: "body"
@@ -207,7 +208,7 @@ paths:
         "201":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdUnit"
+            $ref: "#/definitions/SwdUnitRep"
       security:
       - Authorization: []
     get:
@@ -232,11 +233,29 @@ paths:
             $ref: "#/definitions/arrayOfSwdUnit"
       security:
       - Authorization: []
+  /unitTree/{organizationId}:
+    get:
+      tags:
+      - "组织单元"
+      summary: "获取组织下组织单元树"
+      parameters:
+      - name: "organizationId"
+        in: "path"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/unitTree"
+      security:
+      - Authorization: []
   /swdUnits/{id}:
     put:
       tags:
       - "组织单元"
       summary: "更新组织单元"
+      description: "可以更新部分信息，除了更新swdOrganization字段外"
       parameters:
       - name: "id"
         in: "path"
@@ -251,7 +270,7 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdUnit"
+            $ref: "#/definitions/SwdUnitRep"
       security:
       - Authorization: []
     get:
@@ -284,11 +303,12 @@ paths:
           description: "成功"
       security:
       - Authorization: []
+
   /swdRoles:
     post:
       tags:
       - "岗位"
-      summary: "创建一个新岗位"
+      summary: "创建或更新一个岗位"
       parameters:
       - in: "body"
         name: "body"
@@ -1606,7 +1626,25 @@ definitions:
         type: "string"
       stat:
         type: "integer"
-        format: "int32"
+      swdOrganization:
+        $ref: "#/definitions/SwdOrganization"
+  unitTree:
+    allOf:
+      - $ref: "#/definitions/ApiResponse"
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/SwdUnitExt"
+  SwdUnitExt:
+    allOf:
+      - $ref: "#/definitions/SwdUnit"
+    properties:
+      children:
+        type: "array"
+        items:
+          $ref: "#/definitions/SwdUnitExt"
   arrayOfSwdUnit:
     type: object
     properties:
@@ -1625,30 +1663,29 @@ definitions:
     type: object
     properties:
       name:
-        type: string
+        type: "string"
       parentId:
+        type: "integer"
+      stat:
+        type: number
+      _links:
         type: object
         properties:
-          stat:
-            type: number
-          _links:
+          self:
             type: object
             properties:
-              self:
-                type: object
-                properties:
-                  href:
-                    type: string
-              swdUnit:
-                type: object
-                properties:
-                  href:
-                    type: string
-              swdOrganization:
-                type: object
-                properties:
-                  href:
-                    type: string
+              href:
+                type: string
+          swdUnit:
+            type: object
+            properties:
+              href:
+                type: string
+          swdOrganization:
+            type: object
+            properties:
+              href:
+                type: string
   SwdRole:
     type: "object"
     properties:

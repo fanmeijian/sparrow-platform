@@ -3,19 +3,18 @@ package com.ywsoft.standalone.framework.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the swd_level database table.
  * 
  */
 @Entity
-@Table(name="swd_level")
-@NamedQuery(name="SwdLevel.findAll", query="SELECT s FROM SwdLevel s")
+@Table(name = "swd_level")
+@NamedQuery(name = "SwdLevel.findAll", query = "SELECT s FROM SwdLevel s")
 public class SwdLevel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String id;
 
 	private String code;
@@ -23,6 +22,11 @@ public class SwdLevel implements Serializable {
 	private String name;
 
 	private int stat;
+
+	// uni-directional many-to-one association to SwdOrganization
+	@ManyToOne
+	@JoinColumn(name = "ORGANIZATION_ID")
+	private SwdOrganization swdOrganization;
 
 	public SwdLevel() {
 	}
@@ -59,4 +63,13 @@ public class SwdLevel implements Serializable {
 		this.stat = stat;
 	}
 
+	public SwdOrganization getSwdOrganization() {
+		return swdOrganization;
+	}
+
+	public void setSwdOrganization(SwdOrganization swdOrganization) {
+		this.swdOrganization = swdOrganization;
+	}
+
+	
 }
