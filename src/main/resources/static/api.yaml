@@ -42,6 +42,13 @@ paths:
       responses:
         "200":
           description: "成功"
+  /:
+    get:
+      tags:
+      - "认证"
+      responses:
+        "200":
+          description: "成功"
   /swdOrganizations:
     get:
       tags: 
@@ -309,6 +316,7 @@ paths:
       tags:
       - "岗位"
       summary: "创建或更新一个岗位"
+      description: "swdOrganization 为linkToSwdOrganization"
       parameters:
       - in: "body"
         name: "body"
@@ -337,6 +345,33 @@ paths:
         in: "query"
         type: "string"
         description: "字段名,方向{asc,desc}"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdRole"
+      security:
+      - Authorization: []
+  /swdRoles/search/findBySwdOrganization:
+    get:
+      tags:
+      - "岗位"
+      summary: "获取指定组织下的所有岗位列表"
+      parameters:
+      - name: "organization"
+        in: "query"
+        type: "string"
+        format: "linkToSwdOrganization"
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向[asc|desc]"
       responses:
         "200":
           description: "成功"
@@ -401,7 +436,7 @@ paths:
     post:
       tags:
       - "职级"
-      summary: "创建职级"
+      summary: "创建或更新职级"
       parameters:
       - in: "body"
         name: "body"
@@ -432,6 +467,33 @@ paths:
         description: "字段名,方向{asc,desc}"
       responses:
         "201":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSwdLevel"
+      security:
+      - Authorization: []
+  /swdLevels/search/findBySwdOrganization:
+    get:
+      tags:
+      - "职级"
+      summary: "获取指定组织下的所有职级列表"
+      parameters:
+      - name: "organization"
+        in: "query"
+        type: "string"
+        format: "linkToSwdOrganization"
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向[asc|desc]"
+      responses:
+        "200":
           description: "成功"
           schema:
             $ref: "#/definitions/arrayOfSwdLevel"
@@ -518,13 +580,13 @@ paths:
     post:
       tags:
       - "群组"
-      summary: "创建群组"
+      summary: "创建或更新群组"
       parameters:
       - in: "body"
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/SwdGroup"
+          $ref: "#/definitions/SwdGroupLink"
       responses:
         "201":
           description: "成功"
@@ -562,7 +624,7 @@ paths:
         in: "body"
         required: true
         schema:
-          $ref: "#/definitions/SwdGroup"
+          $ref: "#/definitions/SwdGroupLink"
       responses:
         "200":
           description: "成功"
@@ -584,42 +646,202 @@ paths:
           description: "成功"
       security:
       - Authorization: []
-  /groupMember/{id}:
+  /swdSubGroups/search/findByGroupId:
     get:
       tags:
       - "群组"
-      description: "返回指定组包含的所有成员，群组"
+      summary: "返回指定组的子组"
       parameters:
       - name: "id"
-        in: "path"
+        in: "query"
+        type: "integer"
+        required: true
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向[asc|desc]"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/arrayOfSubGroup"
+      security:
+      - Authorization: []
+  /subGroups/tree:
+    get:
+      tags:
+      - "群组"
+      summary: "获取指定群组的子组树"
+      parameters:
+      - name: "id"
+        in: "query"
         type: "integer"
         required: true
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/groupMembers"
+            type: "object"
+            allOf:
+              - $ref: "#/definitions/ApiResponse"
+            properties:
+              data: 
+                type: "object"
+                allOf:
+                  - $ref: "#/definitions/SwdGroupLink"
+                properties:
+                  subGroups:
+                    type: "array"
+                    items:
+                      type: "object"
       security:
       - Authorization: []
+  /swdGroupUsers/search/findByGroupId:
+    get:
+      tags:
+      - "群组"
+      summary: "返回指定组的组成员"
+      parameters:
+      - name: "id"
+        in: "query"
+        type: "integer"
+        required: true
+      - name: "page"
+        in: "query"
+        type: "integer"
+      - name: "size"
+        in: "query"
+        type: "integer"
+      - name: "sort"
+        in: "query"
+        type: "string"
+        description: "字段名,方向[asc|desc]"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            type: "object"
+            properties:
+              _embedded: 
+                type: "object"
+                properties:
+                  swdUsers:
+                    type: "array"
+                    items:
+                      $ref: "#/definitions/SwdUserLink"
+                  _links:
+                    $ref: "#/definitions/_links"
+                  page:
+                    $ref: "#/definitions/page"
+      security:
+      - Authorization: []
+  /subGroups/add:  
     put:
       tags:
       - "群组"
-      description: "设置群组成员"
+      summary: "设置指定群组的子组"
       parameters:
       - name: "id"
-        in: "path"
+        in: "query"
         type: "integer"
         required: true
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdGroup"
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Authorization: []
+  /subGroups/remove:  
+    put:
+      tags:
+      - "群组"
+      summary: "移除指定群组的子组"
+      parameters:
+      - name: "id"
+        in: "query"
+        type: "integer"
+        required: true
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Authorization: []  
+  /groupUsers/add:  
+    put:
+      tags:
+      - "群组"
+      summary: "设置指定群组的成员"
+      parameters:
+      - name: "id"
+        in: "query"
+        type: "integer"
+        required: true
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Authorization: []
+  /groupUsers/remove:  
+    put:
+      tags:
+      - "群组"
+      summary: "移除指定群组的成员"
+      parameters:
+      - name: "id"
+        in: "query"
+        type: "integer"
+        required: true
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Authorization: []
   /swdEmployees:
     post:
       tags:
       - "员工"
-      summary: "创建员工"
+      summary: "创建或更新员工"
       parameters:
       - in: "body"
         name: "body"
@@ -630,7 +852,7 @@ paths:
         "201":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdEmployee"
+            $ref: "#/definitions/SwdEmployeeRep"
       security:
       - Authorization: []
     get:
@@ -652,7 +874,19 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/arrayOfSwdEmployee"
+            type: "object"
+            properties:
+              _embedded: 
+                type: "object"
+                properties:
+                  swdEmployees:
+                    type: "array"
+                    items:
+                      $ref: "#/definitions/SwdEmployeeRep"
+                  _links:
+                    $ref: "#/definitions/_links"
+                  page:
+                    $ref: "#/definitions/page"
       security:
       - Authorization: []
   /swdEmployees/{id}:
@@ -1697,7 +1931,8 @@ definitions:
         type: "string"
       stat:
         type: "integer"
-        format: "int32"
+      swdOrganization:
+        $ref: "#/definitions/SwdOrganization"
   SwdRoleRep:
     type: object
     properties:
@@ -1716,6 +1951,11 @@ definitions:
               href:
                 type: string
           swdRole:
+            type: object
+            properties:
+              href:
+                type: string
+          swdOrganization:
             type: object
             properties:
               href:
@@ -1745,7 +1985,8 @@ definitions:
         type: "string"
       stat:
         type: "integer"
-        format: "int32"
+      swdOrganization:
+        $ref: "#/definitions/SwdOrganization"
   SwdLevelRep:
     type: object
     properties:
@@ -1768,6 +2009,11 @@ definitions:
             properties:
               href:
                 type: string
+          swdOrganization:
+            type: object
+            properties:
+              href:
+                type: string
   arrayOfSwdLevel:
     type: object
     properties:
@@ -1782,7 +2028,6 @@ definitions:
         $ref: "#/definitions/_links"
       page: 
         $ref: "#/definitions/page"
-  
   SwdEmployee:
     type: "object"
     properties:
@@ -1793,30 +2038,17 @@ definitions:
       stat:
         type: "string"
       swdUnit:
-        $ref: "#/definitions/SwdUnit"
-  arrayOfSwdEmployee:
-    type: "object"
-    properties:
-      _embedded:
-        type: object
-        properties:
-          swdEmployees:
-            type: array
-            items:
-              $ref: "#/definitions/SwdEmployee"
-      _links:
-        $ref: "#/definitions/_links"
-      page: 
-        $ref: "#/definitions/page"
+        type: "string"
+        format: "linkToSwdUnit"
   SwdEmployeeRep:
     type: object
     properties:
       employeeno:
         type: string
       stat:
-        type: string
+        type: "string"
       uplineManager:
-        $ref: "#/definitions/SwdEmployee"
+        type: "string"
       _links:
         type: object
         properties:
@@ -1835,6 +2067,20 @@ definitions:
             properties:
               href:
                 type: string
+  arrayOfSwdEmployee:
+    type: "object"
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdEmployees:
+            type: array
+            items:
+              $ref: "#/definitions/SwdEmployee"
+      _links:
+        $ref: "#/definitions/_links"
+      page: 
+        $ref: "#/definitions/page"
   SwdMenu:
     type: "object"
     properties:
@@ -2128,6 +2374,33 @@ definitions:
         type: "string"
       owner:
         $ref: "#/definitions/SwdEmployee"
+  SwdGroupLink:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "only for update"
+      name:
+        type: "string"
+      stat:
+        type: "string"
+      owner:
+        type: "string"
+        format: "linkToSwdEmployee"
+  arrayOfSubGroup:
+    type: object
+    properties:
+      _embedded:
+        type: object
+        properties:
+          swdGroups:
+            type: array
+            items:
+              $ref: "#/definitions/SwdGroupLink"
+      _links:
+        $ref: "#/definitions/_links"
+      page:
+        $ref: "#/definitions/page"
   SwdGroupRep:
     type: object
     properties:
@@ -2195,6 +2468,44 @@ definitions:
         type: "boolean"
       password:
         type: "string"
+  SwdUserLink:
+    type: object
+    properties:
+      enabled: 
+        type: "integer"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdUser:
+            type: object
+            properties:
+              href:
+                type: string
+          swdMenus:
+            type: object
+            properties:
+              href:
+                type: string
+          swdDataPermissions:
+            type: object
+            properties:
+              href:
+                type: string
+          swdAuthorities:
+            type: object
+            properties:
+              href:
+                type: string
+          swdSysroles:
+            type: object
+            properties:
+              href:
+                type: string
   _links:
     type: object
     properties:

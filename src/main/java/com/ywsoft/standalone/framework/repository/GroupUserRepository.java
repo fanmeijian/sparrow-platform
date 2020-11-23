@@ -13,4 +13,5 @@ public interface GroupUserRepository extends JpaRepository<SwdGroupUser, SwdGrou
 	
 	@Query("SELECT s FROM SwdUser s, SwdGroupUser t WHERE s.username = t.id.username AND t.id.groupId = ?1")
 	Page<SwdUser> findByGroupId(String id,Pageable p);
+
 }
