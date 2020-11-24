@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -130,6 +131,23 @@ public class JwtUtil<HttpServletContext> {
 			return HttpBusinessStatusCode.OLD_PASSWORD_NOT_MATCH;
 		opticalUser.get().setPassword(passwordEncoder.encode(userExt.getPassword()));
 		userRepository.save(opticalUser.get());
+		return ApiResponseFactory.getNormalReponse();
+	}
+
+	/***
+	 * 重置面膜
+	 * 
+	 * @author fanmj
+	 *
+	 */
+	@PutMapping("/oauth2/password")
+	public ApiResponse resetPassword(@RequestBody final SwdUser user) {
+		Optional<SwdUser> opticalUser = userRepository.findById(user.getUsername());
+		if (opticalUser.isEmpty())
+			return HttpBusinessStatusCode.USER_NOT_FOUND;
+		SwdUser swdUser = opticalUser.get();
+		swdUser.setPassword(passwordEncoder.encode(user.getPassword()));
+		userRepository.save(swdUser);
 		return ApiResponseFactory.getNormalReponse();
 	}
 

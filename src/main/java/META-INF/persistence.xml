@@ -40,5 +40,15 @@
 		<class>com.ywsoft.standalone.framework.entity.SwdFlowNoPK</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdLoginLog</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdOperationLog</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleAuthority</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleAuthorityPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleMenu</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleMenuPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserAuthority</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserAuthorityPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserMenu</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserMenuPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserSysrole</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserSysrolePK</class>
 	</persistence-unit>
 </persistence>

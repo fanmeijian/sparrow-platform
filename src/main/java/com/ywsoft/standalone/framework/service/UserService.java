@@ -4,20 +4,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ywsoft.standalone.framework.DataPermission;
+import com.ywsoft.standalone.framework.entity.SwdAuthority;
 import com.ywsoft.standalone.framework.entity.SwdUser;
+import com.ywsoft.standalone.framework.entity.SwdUserAuthority;
+import com.ywsoft.standalone.framework.entity.SwdUserMenu;
+import com.ywsoft.standalone.framework.entity.SwdUserSysrole;
 import com.ywsoft.standalone.framework.repository.AuthorityRepository;
 import com.ywsoft.standalone.framework.repository.MenuRepository;
 import com.ywsoft.standalone.framework.repository.SysroleRepository;
+import com.ywsoft.standalone.framework.repository.UserAuthorityRepository;
+import com.ywsoft.standalone.framework.repository.UserMenuRepository;
 import com.ywsoft.standalone.framework.repository.UserRepository;
+import com.ywsoft.standalone.framework.repository.UserSysroleRepository;
 
 
 @RestController
@@ -35,7 +42,14 @@ public class UserService {
 	@Autowired
 	SysroleRepository sysroleRepository;
 
+	@Autowired
+	UserMenuRepository userMenuRepository;
+
+	@Autowired
+	UserAuthorityRepository userAuthorityRepository;
 	
+	@Autowired
+	UserSysroleRepository userSysroleRepository;
 	
 	/**
 	 * {"username":"","menuId":""}
@@ -50,6 +64,8 @@ public class UserService {
 		userRepository.save(user);
 
 	}
+	
+	
 
 	/***
 	 * 设置用户菜单
@@ -57,6 +73,7 @@ public class UserService {
 	 * 
 	 * @param jObject
 	 */
+	@Deprecated
 	@PostMapping("/userMenus")
 	public void addUserMenus(@RequestBody JSONObject jObject) {
 
@@ -73,6 +90,8 @@ public class UserService {
 		userRepository.save(user);
 
 	}
+	
+	
 
 	/***
 	 * 设置用户功能权限
@@ -130,5 +149,30 @@ public class UserService {
 	@GetMapping("/users")
 	public List<SwdUser> users() {
 		return userRepository.findAll();
+	}
+	
+	
+	@PutMapping("/userMenus")
+	public ApiResponse userMenus(@RequestBody final List<SwdUserMenu> userMenus) {
+		SwdUser user = userRepository.getOne(userMenus.get(0).getId().getUsername());
+		user.getSwdMenus().removeAll(user.getSwdMenus());
+		userMenuRepository.saveAll(userMenus);
+		return ApiResponseFactory.getNormalReponse();
+	}
+	
+	@PutMapping("/userAuthorities")
+	public ApiResponse userAuthorities(@RequestBody final List<SwdUserAuthority> userAuthorities) {
+		SwdUser user = userRepository.getOne(userAuthorities.get(0).getId().getUsername());
+		user.getSwdAuthorities().removeAll(user.getSwdAuthorities());
+		userAuthorityRepository.saveAll(userAuthorities);
+		return ApiResponseFactory.getNormalReponse();
+	}
+	
+	@PutMapping("/userSysroles")
+	public ApiResponse userSysroles(@RequestBody final List<SwdUserSysrole> userSysroles) {
+		SwdUser user = userRepository.getOne(userSysroles.get(0).getId().getUsername());
+		user.getSwdSysroles().removeAll(user.getSwdSysroles());
+		userSysroleRepository.saveAll(userSysroles);
+		return ApiResponseFactory.getNormalReponse();
 	}
 }
