@@ -21,6 +21,8 @@ public class SwdAuthority implements Serializable {
 	private String authority;
 
 	private String uri;
+	
+	private String permission;
 
 	public SwdAuthority() {
 	}
@@ -49,4 +51,13 @@ public class SwdAuthority implements Serializable {
 		this.uri = uri;
 	}
 
+	public String getPermission() {
+		return permission;
+	}
+
+	public void setPermission(String permission) {
+		this.permission = permission;
+	}
+
+	
 }

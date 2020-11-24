@@ -3,7 +3,6 @@ package com.ywsoft.standalone.framework;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,8 +12,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.ywsoft.standalone.framework.repository.AuthorityRepository;
@@ -41,38 +38,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	
 
-	
 	/***
 	 * 从authority表加载配置的功能权限，将功能权限的id作为spring security的角色名
 	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// get the permission from db
-		
-		
-		authorityRepository.findAll().forEach(o -> {
+		authorityRepository.findAll().forEach(authority -> {
 			try {
-
-				if (o.getAuthority().equalsIgnoreCase("ANONYMOUSE")) {
+				if (authority.getPermission().equalsIgnoreCase("ANONYMOUSE")) {
 					// anonymouse access
 					Logger.getLogger(this.toString())
-							.info("初始化匿名访问资源:" + o.getId() + " " + o.getAuthority() + " " + o.getUri());
-					http.csrf().disable().authorizeRequests().antMatchers(o.getUri()).permitAll();
-				} else if (o.getAuthority().equalsIgnoreCase("AUTHENTICATED")) {
+							.info("初始化匿名访问资源:" + authority.getId() + " " + authority.getAuthority() + " " + authority.getUri());
+					http.csrf().disable().authorizeRequests().antMatchers(authority.getUri()).permitAll();
+				} else if (authority.getPermission().equalsIgnoreCase("AUTHENTICATED")) {
 					// athenticated access
-					http.csrf().disable().authorizeRequests().antMatchers(o.getUri()).authenticated();
+					http.csrf().disable().authorizeRequests().antMatchers(authority.getUri()).authenticated();
 					Logger.getLogger(this.toString())
-							.info("初始化认证访问资源:" + o.getId() + " " + o.getAuthority() + " " + o.getUri());
+							.info("初始化认证访问资源:" + authority.getId() + " " + authority.getAuthority() + " " + authority.getUri());
 				} else {
 					// restrict access
 					// put the access control uri in spring security framework
 					Logger.getLogger(this.toString())
-							.info("初始化受限资源:" + o.getId() + " " + o.getAuthority() + " " + o.getUri());
-					http.csrf().disable().authorizeRequests().antMatchers(o.getUri()).hasRole(o.getId());
+							.info("初始化受限资源:" + authority.getId() + " " + authority.getAuthority() + " " + authority.getUri());
+					http.csrf().disable().authorizeRequests().antMatchers(authority.getUri()).hasRole(authority.getId());
 				}
-
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -83,7 +74,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authenticated().and().exceptionHandling().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
 	}
 
 	@Override
@@ -91,7 +81,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// Allow OPTIONS calls to be accessed without authentication
 		web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
 	}
-	
-	
 
 }

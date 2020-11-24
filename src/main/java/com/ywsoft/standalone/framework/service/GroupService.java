@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +52,7 @@ public class GroupService {
 	public ApiResponse subGroupsRecursionTree(@RequestParam(name = "id") String id) {
 		Map<String, SwdGroup> stopRecursion = new HashMap<String, SwdGroup>();// 防止递归
 		GroupExt groupExt = new GroupExt(groupRepository.findById(id).get());
+		groupExt.getGroupUsers().addAll(groupUserRepository.findByGroupId(id, Pageable.unpaged()).toList());
 		stopRecursion.put(groupExt.getId(), groupExt);
 		subGroupsTree(groupExt, stopRecursion);
 		return ApiResponseFactory.getNormalReponse(groupExt);
@@ -61,11 +63,12 @@ public class GroupService {
 			groupExt.getSubGroups().add(group);
 			if (!map.containsKey(group.getId())) {
 				map.put(group.getId(), group);
+				groupExt.getGroupUsers().addAll(groupUserRepository.findByGroupId(group.getId(),Pageable.unpaged()).toList());
 				subGroupsTree(group, map);
 			}
 		}
 	}
-
+	
 
 	/**
 	 * 设置子组

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ywsoft.standalone.framework.entity.SwdUser;
+import com.ywsoft.standalone.framework.entity.ext.UserExt;
 import com.ywsoft.standalone.framework.repository.UserRepository;
 import com.ywsoft.standalone.framework.service.ApiResponse;
 import com.ywsoft.standalone.framework.service.ApiResponseError;
@@ -108,6 +109,28 @@ public class JwtUtil<HttpServletContext> {
 		Map<String, Object> claims = new HashMap<String, Object>();
 		loginLogService.loginLog(user.getUsername(), servletContext.getRemoteAddr());
 		return ApiResponseFactory.getNormalReponse(createToken(claims, user.getUsername()));
+	}
+
+	/***
+	 * 修改密码
+	 * 
+	 * @author fanmj
+	 *
+	 */
+	@PostMapping("/oauth2/password")
+	public ApiResponse modifyPassword(@RequestBody final UserExt userExt) {
+		Optional<SwdUser> opticalUser = userRepository.findById(userExt.getUsername());
+		if (opticalUser.isEmpty())
+			return HttpBusinessStatusCode.USER_NOT_FOUND;
+		loginLogService.loginLog(userExt.getUsername(), servletContext.getRemoteAddr());
+		SwdUser swdUser = opticalUser.get();
+		if (!userExt.getPassword().equals(userExt.getSecondPassword()))
+			return HttpBusinessStatusCode.SECOND_PASSWORD_NOT_MATCH;
+		if (!passwordEncoder.matches(userExt.getOldPassword(), swdUser.getPassword()))
+			return HttpBusinessStatusCode.OLD_PASSWORD_NOT_MATCH;
+		opticalUser.get().setPassword(passwordEncoder.encode(userExt.getPassword()));
+		userRepository.save(opticalUser.get());
+		return ApiResponseFactory.getNormalReponse();
 	}
 
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "用户不存在")

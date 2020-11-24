@@ -38,7 +38,7 @@ public class MenuService {
 	
 	@DataPermission(path = "/menuTree", permission = "LIST")
 	@GetMapping("/menuTrees")
-	public List<MenuTree> menuTree() {
+	public ApiResponse menuTree() {
 		List<MenuTree> menuTrees = new ArrayList<MenuTree>();
 		
 		menuRepository.findByParentId(BigInteger.valueOf(0)).forEach(o -> {
@@ -49,7 +49,7 @@ public class MenuService {
 
 		});
 
-		return menuTrees;
+		return ApiResponseFactory.getNormalReponse(menuTrees);
 	}
 
 	private void buildMenuTree(MenuTree menuTree) {
@@ -117,7 +117,7 @@ public class MenuService {
 	 */
 	@DataPermission(path = "", permission = "")
 	@GetMapping("/userMenuTrees")
-	public List<MenuTree> userMenuTrees(final Principal principal) {
+	public ApiResponse userMenuTrees(final Principal principal) {
 		// get user menus by username
 		List<MenuTree> userMenuTrees = new ArrayList<MenuTree>();
 
@@ -149,7 +149,7 @@ public class MenuService {
 				}
 			}
 		});
-		return userMenuTrees;
+		return ApiResponseFactory.getNormalReponse(userMenuTrees);
 	}
 	
 	
@@ -159,7 +159,7 @@ public class MenuService {
 	 * 获取角色菜单
 	 */
 	@GetMapping("/sysroleMenuTrees")
-	public List<MenuTree> sysroleMenuTrees(@RequestParam(name = "sysroleId") String sysroleId){
+	public ApiResponse sysroleMenuTrees(@RequestParam(name = "sysroleId") String sysroleId){
 		// get user menus by username
 				List<MenuTree> sysroleMenuTrees = new ArrayList<MenuTree>();
 
@@ -191,6 +191,6 @@ public class MenuService {
 						}
 					}
 				});
-				return sysroleMenuTrees;
+				return ApiResponseFactory.getNormalReponse(sysroleMenuTrees);
 	}
 }

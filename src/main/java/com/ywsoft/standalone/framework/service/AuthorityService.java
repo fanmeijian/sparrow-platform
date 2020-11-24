@@ -26,7 +26,7 @@ public class AuthorityService {
 	SysroleRepository sysroleRepository;
 	
 	@GetMapping("/authoritiesWithCheckByUser")
-	public List<Authority> authoritiesWithCheckByUser(@RequestParam(name="username") String username) {
+	public ApiResponse authoritiesWithCheckByUser(@RequestParam(name="username") String username) {
 		List<Authority> list=new ArrayList<Authority>();
 		authorityRepository.findAll().forEach(o->{
 			Authority authority=new Authority(o);
@@ -37,11 +37,11 @@ public class AuthorityService {
 			});
 			list.add(authority);
 		});
-		return list;
+		return ApiResponseFactory.getNormalReponse(list);
 	}
 	
 	@GetMapping("/authoritiesWithCheckBySysrole")
-	public List<Authority> authoritiesWithCheckBySysrole(@RequestParam(name="sysroleId") String sysroleId) {
+	public ApiResponse authoritiesWithCheckBySysrole(@RequestParam(name="sysroleId") String sysroleId) {
 		List<Authority> list=new ArrayList<Authority>();
 		authorityRepository.findAll().forEach(o->{
 			Authority authority=new Authority(o);
@@ -52,6 +52,6 @@ public class AuthorityService {
 			});
 			list.add(authority);
 		});
-		return list;
+		return ApiResponseFactory.getNormalReponse(list);
 	}
 }
