@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ywsoft.standalone.framework.DataPermission;
+import com.ywsoft.standalone.framework.DataPermissionInterface;
 import com.ywsoft.standalone.framework.entity.SwdFile;
 import com.ywsoft.standalone.framework.entity.SwdSysroleFilePK;
 import com.ywsoft.standalone.framework.entity.SwdUserFile;

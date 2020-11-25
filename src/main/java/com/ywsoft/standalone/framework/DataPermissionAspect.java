@@ -37,7 +37,7 @@ public class DataPermissionAspect {
 //		System.out.println(result.getClass());
 //		((List)result).removeAll(((List)result));
 //		((List)result).add(new MenuTree(new SwdMenu()));
-		logger.info("ActionResponse returned with message [{}]", "");
+//		logger.info("ActionResponse returned with message [{}]", "");
 	}
 
 //	@AfterReturning(pointcut = ("execution(* com.ywsoft.standalone.framework.entity.SwdMenu.*(..))"), returning = "result")
@@ -55,7 +55,7 @@ public class DataPermissionAspect {
 	 * @param result
 	 */
 	@AfterReturning(value = "pointCut() && @annotation(dataPermission)", returning = "result")
-	public void afterReturning1(DataPermission dataPermission, Object result) {
+	public void afterReturning1(DataPermissionInterface dataPermission, Object result) {
 
 		String username=SecurityContextHolder.getContext().getAuthentication().getName();
 		String readExpression="";//构造mvel2读取权限的表达式

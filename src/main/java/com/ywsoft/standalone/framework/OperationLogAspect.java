@@ -1,5 +1,7 @@
 package com.ywsoft.standalone.framework;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ywsoft.standalone.framework.entity.SwdUser;
 
 @Aspect
 @Component
@@ -48,6 +51,10 @@ public class OperationLogAspect {
 		Object result = null;
 		try {
 			result = point.proceed();
+			logger.info("{} {}->{}({}): {} in {}", "",
+					point.getSignature().getDeclaringTypeName(),
+					MethodSignature.class.cast(point.getSignature()).getMethod().getName(), point.getArgs(),
+					result, System.currentTimeMillis() - start);
 			// 需通过requestcontextholder来判断httprequest是否有效，否则启动的时候会报错；同时只记录保存的
 			if (RequestContextHolder.getRequestAttributes() != null) {
 				if (!request.getMethod().equals(HttpMethod.GET.toString())
@@ -60,10 +67,9 @@ public class OperationLogAspect {
 					
 					logService.operationLog(request, MethodSignature.class.cast(point.getSignature()).getMethod().getName(), point.getArgs(), result);
 				}
-			}
+			}		
 
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;
@@ -97,6 +103,10 @@ public class OperationLogAspect {
 		long start = System.currentTimeMillis();
 		Object result = null;
 		try {
+			logger.info("{} {}->{}({}): {} in {}", "",
+					point.getSignature().getDeclaringTypeName(),
+					MethodSignature.class.cast(point.getSignature()).getMethod().getName(), point.getArgs(),
+					result, System.currentTimeMillis() - start);
 			result = point.proceed();
 			if (!request.getMethod().equals(HttpMethod.GET.toString())) {
 //				logger.info("{}{}->{}({}): {} in {}", request.getMethod(), point.getSignature().getDeclaringTypeName(),

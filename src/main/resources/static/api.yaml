@@ -192,7 +192,7 @@ paths:
           description: "成功"
       security:
       - Authorization: []
-  /organizationRelation:
+  /swdOrganizationRelations:
     post:
       tags: 
       - "组织"
@@ -210,16 +210,40 @@ paths:
             $ref: "#/definitions/SwdOrganizationRelation"
       security:
       - Authorization: []
+  /swdOrganizationRelations/{id}:
+    patch:
+      tags: 
+      - "组织"
+      summary: "更新组织关系"
+      parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        type: "string"
+        format: "organizationId,targetId"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            relation:
+              type: "integer"
+      responses:
+        "204":
+          description: "成功"
+      security:
+      - Authorization: []
     delete:
       tags: 
       - "组织"
       summary: "删除组织关系"
       parameters:
-      - in: "body"
-        name: "body"
+      - in: "path"
+        name: "id"
         required: true
-        schema:
-          $ref: "#/definitions/SwdOrganizationRelationPK"
+        type: "string"
+        format: "organizationId,targetId"
       responses:
         "204":
           description: "成功"
@@ -1852,18 +1876,18 @@ paths:
     post:
       tags: 
       - "字段权限"
-      summary: "创建字段"
+      summary: "创建字段权限"
       parameters:
         - name: "body"
           in: "body"
           schema:
-            $ref: "#/definitions/SwdField"
+            $ref: "#/definitions/SwdFieldPermission"
           required: true
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdFieldRep"
+            $ref: "#/definitions/SwdFieldPermissionRep"
       security:
       - Authorization: []
   /swdFieldPermissions/{id}:
