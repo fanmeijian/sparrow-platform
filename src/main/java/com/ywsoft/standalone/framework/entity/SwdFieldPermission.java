@@ -5,17 +5,17 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the swd_field database table.
+ * The persistent class for the swd_field_permission database table.
  * 
  */
 @Entity
-@Table(name="swd_field")
-@NamedQuery(name="SwdField.findAll", query="SELECT s FROM SwdField s")
-public class SwdField implements Serializable {
+@Table(name="swd_field_permission")
+@NamedQuery(name="SwdFieldPermission.findAll", query="SELECT s FROM SwdFieldPermission s")
+public class SwdFieldPermission implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private SwdFieldPK id;
+	private SwdFieldPermissionPK id;
 
 	@Column(name="FIELD_NAME")
 	private String fieldName;
@@ -23,14 +23,14 @@ public class SwdField implements Serializable {
 	@Column(name="MODEL_NAME")
 	private String modelName;
 
-	public SwdField() {
+	public SwdFieldPermission() {
 	}
 
-	public SwdFieldPK getId() {
+	public SwdFieldPermissionPK getId() {
 		return this.id;
 	}
 
-	public void setId(SwdFieldPK id) {
+	public void setId(SwdFieldPermissionPK id) {
 		this.id = id;
 	}
 

@@ -1574,7 +1574,7 @@ paths:
           description: "成功"
       security:
       - Authorization: []
-  /dataPermission:
+  /swdDataPermissions:
     get:
       tags: 
       - "数据权限"
@@ -1586,27 +1586,10 @@ paths:
             $ref: "#/definitions/arrayOfSwdDataPermission"
       security:
       - Authorization: []
-    put:
-      tags: 
-      - "数据权限"
-      summary: "更新数据权限"
-      parameters:
-        - name: "body"
-          in: "body"
-          schema:
-            $ref: "#/definitions/SwdDataPermission"
-          required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/SwdDataPermission"
-      security:
-      - Authorization: []
     post:
       tags: 
       - "数据权限"
-      summary: "更新数据权限"
+      summary: "创建数据权限"
       parameters:
         - name: "body"
           in: "body"
@@ -1620,10 +1603,211 @@ paths:
             $ref: "#/definitions/SwdDataPermission"
       security:
       - Authorization: []
+  /swdDataPermissions/{id}:
+    get:
+      tags: 
+      - "数据权限"
+      summary: "获取数据权限详情"
+      parameters:
+        - name: "id"
+          in: "path"
+          type: "string"
+          format: "model,pkey,permission"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+      security:
+      - Authorization: []
+    patch:
+      tags: 
+      - "数据权限"
+      summary: "更新数据权限"
+      parameters:
+        - name: "id"
+          in: "path"
+          type: "string"
+          format: "model,pkey,permission"
+          required: true
+        - name: "body"
+          in: "body"
+          schema:
+            type: "object"
+            properties:
+              permissionEl:
+                type: "string"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdDataPermission"
+      security:
+      - Authorization: []
     delete:
       tags: 
       - "数据权限"
       summary: "删除数据权限"
+      parameters:
+        - name: "id"
+          in: "path"
+          type: "string"
+          format: "model,pkey,permission"
+          required: true
+      responses:
+        "204":
+          description: "成功"
+      security:
+      - Authorization: []
+  /swdUserDataPermissions:
+    get:
+      tags: 
+      - "数据权限"
+      summary: "列出所有的用户数据权限"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            type: "object"
+            properties:
+              _embedded: 
+                type: "object"
+                properties:
+                  swdUserDataPermissions:
+                    type: "array"
+                    items:
+                      $ref: "#/definitions/SwdUserDataPermissionRep"
+                  _links:
+                    $ref: "#/definitions/_links"
+                  page:
+                    $ref: "#/definitions/page"
+      security:
+      - Authorization: []
+    post:
+      tags: 
+      - "数据权限"
+      summary: "创建用户数据权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdUserDataPermission"
+          required: true
+      responses:
+        "201":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdUserDataPermissionRep"
+      security:
+      - Authorization: []
+  /swdUserDataPermissions/{id}:
+    get:
+      tags: 
+      - "数据权限"
+      summary: "获取用户数据权限详情"
+      parameters:
+        - name: "id"
+          in: "path"
+          type: "string"
+          format: "model,pkey,permission,username"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+      security:
+      - Authorization: []
+    delete:
+      tags: 
+      - "数据权限"
+      summary: "删除用户数据权限"
+      parameters:
+        - name: "id"
+          in: "path"
+          type: "string"
+          format: "model,pkey,permission,username"
+          required: true
+      responses:
+        "204":
+          description: "成功"
+      security:
+      - Authorization: []
+  /swdSysroleDataPermissions:
+    get:
+      tags: 
+      - "数据权限"
+      summary: "列出所有的系统角色数据权限"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            type: "object"
+            properties:
+              _embedded: 
+                type: "object"
+                properties:
+                  swdSysroleDataPermissions:
+                    type: "array"
+                    items:
+                      $ref: "#/definitions/SwdSysroleDataPermissionRep"
+                  _links:
+                    $ref: "#/definitions/_links"
+                  page:
+                    $ref: "#/definitions/page"
+      security:
+      - Authorization: []
+    post:
+      tags: 
+      - "数据权限"
+      summary: "创建系统角色数据权限"
+      parameters:
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdSysroleDataPermission"
+          required: true
+      responses:
+        "201":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdSysroleDataPermissionRep"
+      security:
+      - Authorization: []
+  /swdSysroleDataPermissions/{id}:
+    get:
+      tags: 
+      - "数据权限"
+      summary: "获取系统角色数据权限详情"
+      parameters:
+        - name: "id"
+          in: "path"
+          type: "string"
+          format: "model,pkey,permission,sysroleId"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+      security:
+      - Authorization: []
+    delete:
+      tags: 
+      - "数据权限"
+      summary: "删除系统角色数据权限"
+      parameters:
+        - name: "id"
+          in: "path"
+          type: "string"
+          format: "model,pkey,permission,sysroleId"
+          required: true
+      responses:
+        "204":
+          description: "成功"
+      security:
+      - Authorization: []
+  /dataPermission:
+    post:
+      tags: 
+      - "数据权限"
+      summary: "判断当前用户是否有数据权限"
       parameters:
         - name: "body"
           in: "body"
@@ -1631,11 +1815,17 @@ paths:
             $ref: "#/definitions/SwdDataPermissionPK"
           required: true
       responses:
-        "204":
+        "200":
           description: "成功"
+          schema:
+            allOf: 
+            - $ref: "#/definitions/ApiResponse"
+            properties:
+              data:
+                type: "boolean"
       security:
       - Authorization: []
-  /fields:
+  /swdFieldPermissions:
     get:
       tags: 
       - "字段权限"
@@ -1644,24 +1834,19 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/arrayOfSwdField"
-      security:
-      - Authorization: []
-    put:
-      tags: 
-      - "字段权限"
-      summary: "更新字段"
-      parameters:
-        - name: "body"
-          in: "body"
-          schema:
-            $ref: "#/definitions/SwdField"
-          required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/SwdField"
+            type: "object"
+            properties:
+              _embedded: 
+                type: "object"
+                properties:
+                  swdFieldPermissions:
+                    type: "array"
+                    items:
+                      $ref: "#/definitions/SwdFieldPermissionRep"
+                  _links:
+                    $ref: "#/definitions/_links"
+                  page:
+                    $ref: "#/definitions/page"
       security:
       - Authorization: []
     post:
@@ -1678,7 +1863,47 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdField"
+            $ref: "#/definitions/SwdFieldRep"
+      security:
+      - Authorization: []
+  /swdFieldPermissions/{id}:
+    get:
+      tags: 
+      - "字段权限"
+      summary: "获取字段详情"
+      parameters:
+        - name: "id"
+          in: "path"
+          type: "string"
+          format: "model,field"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdFieldPermissionRep"
+      security:
+      - Authorization: []
+    patch:
+      tags: 
+      - "字段权限"
+      summary: "更新字段"
+      parameters:
+        - name: "id"
+          in: "path"
+          type: "string"
+          format: "model,field,permission"
+          required: true
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: "#/definitions/SwdFieldPermission"
+          required: true
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/SwdFieldPermissionRep"
       security:
       - Authorization: []
     delete:
@@ -1686,220 +1911,39 @@ paths:
       - "字段权限"
       summary: "删除字段"
       parameters:
-        - name: "body"
-          in: "body"
-          schema:
-            $ref: "#/definitions/SwdFieldPK"
+        - name: "id"
+          in: "path"
+          type: "string"
+          format: "model,field,permission"
           required: true
       responses:
         "200":
           description: "成功"
       security:
       - Authorization: []
-  /myFieldPermission/{model}:
-    get:
-      tags: 
-      - "字段权限"
-      summary: "当前用户字段权限"
-      description: "根据模型名称"
-      parameters:
-      - name: "model"
-        in: "path"
-        type: "string"
-        required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/arrayOfSwdField"
-      security:
-      - Authorization: []
-  /myFieldPermission/{model}/{field}:
-    get:
-      tags: 
-      - "字段权限"
-      summary: "当前用户字段权限"
-      description: "根据模型名称和字段名称"
-      parameters:
-      - name: "model"
-        in: "path"
-        type: "string"
-        required: true
-      - name: "field"
-        in: "path"
-        type: "string"
-        required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/arrayOfSwdField"
-      security:
-      - Authorization: []
-  /myFieldPermission/{model}/{field}/{permission}:
-    get:
-      tags: 
-      - "字段权限"
-      summary: "当前用户字段权限"
-      description: "根据模型名称，字段名称，和权限，判断是否有此权限"
-      parameters:
-      - name: "model"
-        in: "path"
-        type: "string"
-        required: true
-      - name: "field"
-        in: "path"
-        type: "string"
-        required: true
-      - name: "permission"
-        in: "path"
-        type: "string"
-        required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/arrayOfSwdField"
-      security:
-      - Authorization: []
-  /userFieldPermission/{model}:
-    get:
-      tags: 
-      - "字段权限"
-      summary: "指定用户字段权限"
-      description: "根据模型名称判断是否有此权限"
-      parameters:
-      - name: "model"
-        in: "path"
-        type: "string"
-        required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/arrayOfSwdField"
-      security:
-      - Authorization: []
-  /fields/{model}/{field}:
-    delete:
-      tags: 
-      - "字段权限"
-      summary: "删除字段"
-      parameters:
-      - name: "model"
-        in: "path"
-        type: "string"
-        required: true
-      - name: "field"
-        in: "path"
-        type: "string"
-        required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/arrayOfSwdField"
-      security:
-      - Authorization: []
-  /fields/{model}:
-    delete:
-      tags: 
-      - "字段权限"
-      summary: "删除字段"
-      parameters:
-      - name: "model"
-        in: "path"
-        type: "string"
-        required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/arrayOfSwdField"
-      security:
-      - Authorization: []
-  /userFieldPermission/{model}/{field}:
-    get:
-      tags: 
-      - "字段权限"
-      summary: "当前用户字段权限"
-      parameters:
-      - name: "model"
-        in: "path"
-        type: "string"
-        required: true
-      - name: "field"
-        in: "path"
-        type: "string"
-        required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/arrayOfSwdField"
-      security:
-      - Authorization: []
-  /userFieldPermission:
-    get:
-      tags: 
-      - "字段权限"
-      summary: "列出所有字段"
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/arrayOfSwdField"
-      security:
-      - Authorization: []
-    put:
-      tags: 
-      - "字段权限"
-      summary: "更新字段权限"
-      parameters:
-        - name: "body"
-          in: "body"
-          schema:
-            $ref: "#/definitions/SwdField"
-          required: true
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            $ref: "#/definitions/SwdField"
-      security:
-      - Authorization: []
+  /fieldPermission:
     post:
       tags: 
       - "字段权限"
-      summary: "创建字段权限"
+      summary: "判断当前用户是否有字段权限"
       parameters:
         - name: "body"
           in: "body"
           schema:
-            $ref: "#/definitions/SwdField"
+            $ref: "#/definitions/SwdFieldPermissionPK"
           required: true
       responses:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/SwdField"
+            allOf: 
+            - $ref: "#/definitions/ApiResponse"
+            properties:
+              data:
+                type: "boolean"
       security:
       - Authorization: []
-    delete:
-      tags: 
-      - "字段权限"
-      summary: "删除字段权限"
-      parameters:
-        - name: "body"
-          in: "body"
-          schema:
-            $ref: "#/definitions/SwdFieldPK"
-          required: true
-      responses:
-        "200":
-          description: "成功"
-      security:
-      - Authorization: []
+      
   /swdUsers:
     post:
       tags:
@@ -2756,7 +2800,6 @@ definitions:
     type: "object"
     properties:
       id:
-        type: "object"
         $ref: "#/definitions/SwdDataPermissionPK"
       permissionEl:
         type: "string"
@@ -2769,30 +2812,112 @@ definitions:
         type: "string"
       model:
         type: "string"
+  SwdUserDataPermission:
+    type: "object"
+    properties:
+      id: 
+        $ref: "#/definitions/SwdUserDataPermissionPK"
+  SwdUserDataPermissionPK:
+    type: "object"
+    properties:
+      permission:
+        type: "string"
+      pkey:
+        type: "string"
+      model:
+        type: "string"
+      username:
+        type: "string"
+  SwdUserDataPermissionRep:
+    type: object
+    properties:
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdUserDataPermission:
+            type: object
+            properties:
+              href:
+                type: string
+  SwdSysroleDataPermission:
+    type: "object"
+    properties:
+      id: 
+        $ref: "#/definitions/SwdSysroleDataPermissionPK"
+  SwdSysroleDataPermissionPK:
+    type: "object"
+    properties:
+      permission:
+        type: "string"
+      pkey:
+        type: "string"
+      model:
+        type: "string"
+      sysroleId:
+        type: "string"
+  SwdSysroleDataPermissionRep:
+    type: object
+    properties:
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdSysroleDataPermission:
+            type: object
+            properties:
+              href:
+                type: string
   arrayOfSwdDataPermission:
     type: "array"
     items:
       $ref: "#/definitions/SwdDataPermission"
-  SwdField:
+  SwdFieldPermission:
     type: "object"
     properties:
       id:
-        $ref: "#/definitions/SwdFieldPK"
+        $ref: "#/definitions/SwdFieldPermissionPK"
       fieldName:
         type: "string"
       modelName:
         type: "string"
-  SwdFieldPK:
+  SwdFieldPermissionPK:
     type: "object"
     properties:
       model:
         type: "string"
       field:
         type: "string"
-  arrayOfSwdField:
-    type: "array"
-    items:
-      $ref: "#/definitions/SwdField"
+      permission:
+        type: "string"
+  SwdFieldPermissionRep:
+    type: "object"
+    properties:
+      fieldName:
+        type: "string"
+      modelName:
+        type: "string"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+          swdFieldPermission:
+            type: object
+            properties:
+              href:
+                type: string
   SwdGroup:
     type: "object"
     properties:

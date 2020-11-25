@@ -4,11 +4,11 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the swd_user_field_permission database table.
+ * The primary key class for the swd_user_data_permission database table.
  * 
  */
 @Embeddable
-public class SwdUserFieldPermissionPK implements Serializable {
+public class SwdUserDataPermissionPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
@@ -16,15 +16,15 @@ public class SwdUserFieldPermissionPK implements Serializable {
 	private String username;
 
 	@Column(insertable=false, updatable=false)
-	private String model;
-
-	@Column(insertable=false, updatable=false)
-	private String field;
-
-	@Column(insertable=false, updatable=false)
 	private String permission;
 
-	public SwdUserFieldPermissionPK() {
+	@Column(insertable=false, updatable=false)
+	private String pkey;
+
+	@Column(insertable=false, updatable=false)
+	private String model;
+
+	public SwdUserDataPermissionPK() {
 	}
 	public String getUsername() {
 		return this.username;
@@ -32,47 +32,47 @@ public class SwdUserFieldPermissionPK implements Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getModel() {
-		return this.model;
-	}
-	public void setModel(String model) {
-		this.model = model;
-	}
-	public String getField() {
-		return this.field;
-	}
-	public void setField(String field) {
-		this.field = field;
-	}
 	public String getPermission() {
 		return this.permission;
 	}
 	public void setPermission(String permission) {
 		this.permission = permission;
 	}
+	public String getPkey() {
+		return this.pkey;
+	}
+	public void setPkey(String pkey) {
+		this.pkey = pkey;
+	}
+	public String getModel() {
+		return this.model;
+	}
+	public void setModel(String model) {
+		this.model = model;
+	}
 
 	public boolean equals(Object other) {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof SwdUserFieldPermissionPK)) {
+		if (!(other instanceof SwdUserDataPermissionPK)) {
 			return false;
 		}
-		SwdUserFieldPermissionPK castOther = (SwdUserFieldPermissionPK)other;
+		SwdUserDataPermissionPK castOther = (SwdUserDataPermissionPK)other;
 		return 
 			this.username.equals(castOther.username)
-			&& this.model.equals(castOther.model)
-			&& this.field.equals(castOther.field)
-			&& this.permission.equals(castOther.permission);
+			&& this.permission.equals(castOther.permission)
+			&& this.pkey.equals(castOther.pkey)
+			&& this.model.equals(castOther.model);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
 		hash = hash * prime + this.username.hashCode();
-		hash = hash * prime + this.model.hashCode();
-		hash = hash * prime + this.field.hashCode();
 		hash = hash * prime + this.permission.hashCode();
+		hash = hash * prime + this.pkey.hashCode();
+		hash = hash * prime + this.model.hashCode();
 		
 		return hash;
 	}

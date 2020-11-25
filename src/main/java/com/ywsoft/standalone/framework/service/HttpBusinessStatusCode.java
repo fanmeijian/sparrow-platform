@@ -33,4 +33,9 @@ public final class HttpBusinessStatusCode {
 	 */
 	public static ApiResponse ORGANIZATION_NOT_FOUND = new ApiResponseError("1005","组织不存在");
 	
+	/**
+	 * 
+	 * {@code 1010 组织不存在}.
+	 */
+	public static ApiResponse DATA_NOT_FOUND = new ApiResponseError("1010","数据不存在");
 }

@@ -18,6 +18,7 @@ public class SwdSysroleFieldPermissionPK implements Serializable {
 	@Column(insertable=false, updatable=false)
 	private String model;
 
+	@Column(insertable=false, updatable=false)
 	private String permission;
 
 	@Column(name="SYSROLE_ID", insertable=false, updatable=false)

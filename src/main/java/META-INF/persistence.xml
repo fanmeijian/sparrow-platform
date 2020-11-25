@@ -4,18 +4,12 @@
 		<class>com.ywsoft.standalone.framework.entity.SwdAuthority</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdDataPermission</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdDataPermissionPK</class>
-		<class>com.ywsoft.standalone.framework.entity.SwdField</class>
-		<class>com.ywsoft.standalone.framework.entity.SwdFieldPK</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdFile</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdMenu</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdSysrole</class>
-		<class>com.ywsoft.standalone.framework.entity.SwdSysroleFieldPermission</class>
-		<class>com.ywsoft.standalone.framework.entity.SwdSysroleFieldPermissionPK</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdSysroleFile</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdSysroleFilePK</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdUser</class>
-		<class>com.ywsoft.standalone.framework.entity.SwdUserFieldPermission</class>
-		<class>com.ywsoft.standalone.framework.entity.SwdUserFieldPermissionPK</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdUserFile</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdUserFilePK</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdEmployee</class>
@@ -50,5 +44,15 @@
 		<class>com.ywsoft.standalone.framework.entity.SwdUserMenuPK</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdUserSysrole</class>
 		<class>com.ywsoft.standalone.framework.entity.SwdUserSysrolePK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleDataPermission</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleDataPermissionPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserDataPermission</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserDataPermissionPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdFieldPermission</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdFieldPermissionPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleFieldPermission</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdSysroleFieldPermissionPK</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserFieldPermission</class>
+		<class>com.ywsoft.standalone.framework.entity.SwdUserFieldPermissionPK</class>
 	</persistence-unit>
 </persistence>
