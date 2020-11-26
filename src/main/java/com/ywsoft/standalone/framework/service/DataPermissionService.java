@@ -74,14 +74,15 @@ public class DataPermissionService {
 		boolean sysrolePermission = false;// 检查用户的角色里是否有权限
 		Optional<SwdDataPermission> optional = dataPermissionRepository.findById(dataPermissionPK);
 		if (optional.isEmpty())
-			return HttpBusinessStatusCode.DATA_NOT_FOUND;
-
-		// 检查公式表达式是否有此权限
-		String el = optional.get().getPermissionEl();
-		if (el != null) {
-			elPermission = (boolean) MVEL.eval(el, mapMvel);
+			elPermission = true;
+		else {
+			// 检查公式表达式是否有此权限
+			String el = optional.get().getPermissionEl();
+			if (el != null) {
+				elPermission = (boolean) MVEL.eval(el, mapMvel);
+			}
 		}
-
+		
 		// 检查用户是否有此权限
 		SwdUserDataPermissionPK userDataPermissionPK = new SwdUserDataPermissionPK();
 		userDataPermissionPK.setModel(dataPermissionPK.getModel());

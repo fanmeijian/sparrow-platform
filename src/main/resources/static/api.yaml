@@ -420,16 +420,16 @@ paths:
             $ref: "#/definitions/arrayOfSwdRole"
       security:
       - Authorization: []
-  /swdRoles/search/findBySwdOrganization:
+  /swdRoles/search/findBySwdOrganizationId:
     get:
       tags:
       - "岗位"
       summary: "获取指定组织下的所有岗位列表"
       parameters:
-      - name: "organization"
+      - name: "organizationId"
         in: "query"
         type: "string"
-        format: "linkToSwdOrganization"
+        required: true
       - name: "page"
         in: "query"
         type: "integer"

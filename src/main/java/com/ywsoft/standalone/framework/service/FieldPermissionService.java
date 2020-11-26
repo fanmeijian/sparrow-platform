@@ -44,7 +44,7 @@ public class FieldPermissionService {
 		boolean sysrolePermission = false;// 检查用户的角色里是否有权限
 		Optional<SwdFieldPermission> optional = fieldPermissionRepository.findById(fieldPermissionPK);
 		if (optional.isEmpty())
-			return HttpBusinessStatusCode.DATA_NOT_FOUND;
+			elPermission = true;
 
 		// 检查用户是否有此权限
 		SwdUserFieldPermissionPK userFieldPermissionPK = new SwdUserFieldPermissionPK();

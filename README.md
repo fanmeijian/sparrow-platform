@@ -14,6 +14,11 @@ post /oauth2/token
 
 rest service url请参考wiki
 
+数据权限，第一个为id参数，第二个为model的全名，第三个为权限
+@PreAuthorize("hasPermission(#id,'com.ywsoft.standalone.framework.entity.SwdRole','READ')")
+
+字段权限：尚未完善，path留空，permission为权限，用在返回单个model的地方上
+@DataPermissionInterface(path = "", permission = "READ")
 
 前端请参考项目sparrow-platform-ng https://github.com/fanmeijian/sparrow-platform-ng
 

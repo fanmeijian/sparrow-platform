@@ -28,7 +28,7 @@ public class MenuService {
 	@Autowired
 	SysroleRepository sysroleRepository;
 
-	@DataPermissionInterface(path = "/menuTree", permission = "LIST")
+//	@DataPermissionInterface(path = "/menuTree", permission = "LIST")
 	@GetMapping("/menuTrees")
 	public ApiResponse menuTree() {
 		List<MenuTree> menuTrees = new ArrayList<MenuTree>();
