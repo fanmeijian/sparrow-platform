@@ -49,20 +49,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			try {
 				if (authority.getPermission().equalsIgnoreCase("ANONYMOUSE")) {
 					// anonymouse access
-					Logger.getLogger(this.toString())
-							.info("初始化匿名访问资源:" + authority.getId() + " " + authority.getAuthority() + " " + authority.getUri());
-					http.csrf().disable().authorizeRequests().antMatchers(authority.getUri()).permitAll();
+					Logger.getLogger(this.toString()).info("初始化匿名访问资源:" + authority.getId() + " "
+							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());
+					http.csrf().disable().authorizeRequests()
+							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).permitAll();
 				} else if (authority.getPermission().equalsIgnoreCase("AUTHENTICATED")) {
 					// athenticated access
-					http.csrf().disable().authorizeRequests().antMatchers(authority.getUri()).authenticated();
-					Logger.getLogger(this.toString())
-							.info("初始化认证访问资源:" + authority.getId() + " " + authority.getAuthority() + " " + authority.getUri());
+					http.csrf().disable().authorizeRequests()
+							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).authenticated();
+					Logger.getLogger(this.toString()).info("初始化认证访问资源:" + authority.getId() + " "
+							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());
 				} else {
 					// restrict access
 					// put the access control uri in spring security framework
-					Logger.getLogger(this.toString())
-							.info("初始化受限资源:" + authority.getId() + " " + authority.getAuthority() + " " + authority.getUri());
-					http.csrf().disable().authorizeRequests().antMatchers(authority.getUri()).hasRole(authority.getId());
+					Logger.getLogger(this.toString()).info("初始化受限资源:" + authority.getId() + " " + authority.getMethod()
+							+ " " + authority.getAuthority() + " " + authority.getUri());
+					http.csrf().disable().authorizeRequests()
+							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri())
+							.hasRole(authority.getId());
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

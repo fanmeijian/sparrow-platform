@@ -23,6 +23,8 @@ public class SwdAuthority implements Serializable {
 	private String uri;
 	
 	private String permission;
+	
+	private String method;
 
 	public SwdAuthority() {
 	}
@@ -59,5 +61,12 @@ public class SwdAuthority implements Serializable {
 		this.permission = permission;
 	}
 
-	
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
 }

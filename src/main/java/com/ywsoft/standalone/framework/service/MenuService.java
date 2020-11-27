@@ -102,13 +102,13 @@ public class MenuService {
 	 * 
 	 * @return
 	 */
-	@DataPermissionInterface(path = "", permission = "")
 	@GetMapping("/userMenuTrees")
 	public ApiResponse userMenuTrees(final Principal principal) {
 		// get user menus by username
 		List<MenuTree> userMenuTrees = new ArrayList<MenuTree>();
 
-		userRepository.findById(principal.getName()).get().getSwdMenus().forEach(o -> {
+		menuRepository.findByUser(principal.getName()).forEach(o -> {
+//		userRepository.findById(principal.getName()).get().getSwdMenus().forEach(o -> {
 //			MenuTree menuTree = new MenuTree(o);
 			// 先将自己往上找到完整根树
 			List<MenuTree> tmpList = new ArrayList<MenuTree>();

@@ -51,10 +51,10 @@ public class OperationLogAspect {
 		Object result = null;
 		try {
 			result = point.proceed();
-			logger.info("{} {}->{}({}): {} in {}", "",
-					point.getSignature().getDeclaringTypeName(),
-					MethodSignature.class.cast(point.getSignature()).getMethod().getName(), point.getArgs(),
-					result, System.currentTimeMillis() - start);
+//			logger.info("{} {}->{}({}): {} in {}", "",
+//					point.getSignature().getDeclaringTypeName(),
+//					MethodSignature.class.cast(point.getSignature()).getMethod().getName(), point.getArgs(),
+//					result, System.currentTimeMillis() - start);
 			// 需通过requestcontextholder来判断httprequest是否有效，否则启动的时候会报错；同时只记录保存的
 			if (RequestContextHolder.getRequestAttributes() != null) {
 				if (!request.getMethod().equals(HttpMethod.GET.toString())
@@ -103,10 +103,10 @@ public class OperationLogAspect {
 		long start = System.currentTimeMillis();
 		Object result = null;
 		try {
-			logger.info("{} {}->{}({}): {} in {}", "",
-					point.getSignature().getDeclaringTypeName(),
-					MethodSignature.class.cast(point.getSignature()).getMethod().getName(), point.getArgs(),
-					result, System.currentTimeMillis() - start);
+//			logger.info("{} {}->{}({}): {} in {}", "",
+//					point.getSignature().getDeclaringTypeName(),
+//					MethodSignature.class.cast(point.getSignature()).getMethod().getName(), point.getArgs(),
+//					result, System.currentTimeMillis() - start);
 			result = point.proceed();
 			if (!request.getMethod().equals(HttpMethod.GET.toString())) {
 //				logger.info("{}{}->{}({}): {} in {}", request.getMethod(), point.getSignature().getDeclaringTypeName(),

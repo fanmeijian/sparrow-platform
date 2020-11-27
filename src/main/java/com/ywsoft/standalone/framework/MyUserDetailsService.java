@@ -2,9 +2,7 @@ package com.ywsoft.standalone.framework;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +36,6 @@ public class MyUserDetailsService implements UserDetailsService {
 		swdUser.getSwdSysroles().forEach(o -> {
 			authorities.addAll(o.getSwdAuthorities());
 		});
-		Assert.notEmpty(authorities, "没有权限");
 		String[] roles = new String[authorities.size()];
 		authorities.forEach(o -> {
 			roles[authorities.indexOf(o)] = o.getId();

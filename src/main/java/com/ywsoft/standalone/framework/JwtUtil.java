@@ -101,6 +101,7 @@ public class JwtUtil<HttpServletContext> {
 
 	@PostMapping("/oauth2/token")
 	public ApiResponse token(@RequestBody final SwdUser user) {
+//		System.out.println(passwordEncoder.encode(user.getPassword()));
 		Optional<SwdUser> opticalUser = userRepository.findById(user.getUsername());
 		if (opticalUser.isEmpty())
 			return HttpBusinessStatusCode.USER_NOT_FOUND;
