@@ -7,7 +7,6 @@ import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.ywsoft.standalone.framework.controller.DataPermissionController;
 import com.ywsoft.standalone.framework.entity.SwdDataPermissionPK;
 import com.ywsoft.standalone.framework.service.DataPermissionService;
 
