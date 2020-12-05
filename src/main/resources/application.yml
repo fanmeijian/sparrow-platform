@@ -1,4 +1,12 @@
-server.port: 6060
-server.address: 0.0.0.0
+server:
+  port: 8091
+  servlet: 
+    context-path: /sparrow-platform
+
+spring:
+  security:
+    oauth2:
+      resourceserver:        jwt:          jwk-set-uri: http://localhost:6060/.well-known/jwks.json
+          
 
 # security.oauth2.authorizationserver.jwt.enabled: false

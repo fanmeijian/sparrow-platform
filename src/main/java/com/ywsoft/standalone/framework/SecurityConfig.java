@@ -19,8 +19,8 @@ import com.ywsoft.standalone.framework.repository.AuthorityRepository;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	JwtRequestFilter jwtRequestFilter;
+//	@Autowired
+//	JwtRequestFilter jwtRequestFilter;
 
 	@Autowired
 	AuthorityRepository authorityRepository;
@@ -74,10 +74,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			}
 		});
 		// let the get token method allowed
-		http.csrf().disable().authorizeRequests().antMatchers("/authenticate", "/oauth2/token").permitAll().anyRequest()
-				.authenticated().and().exceptionHandling().and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//		http.csrf().disable().authorizeRequests().antMatchers("/authenticate", "/oauth2/token").permitAll().anyRequest()
+//				.authenticated().and().exceptionHandling().and().sessionManagement()
+//				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		//说明这是一个资源服务器，jwt格式的token
+		http.csrf().disable().oauth2ResourceServer().jwt();
 	}
 
 	@Override
