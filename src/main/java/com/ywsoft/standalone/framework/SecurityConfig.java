@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.ywsoft.standalone.framework.repository.AuthorityRepository;
@@ -27,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	MyUserDetailsService userDetailsService;
+	
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -37,6 +39,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
+	}
+	
+	@Bean
+	public JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter() {
+		JwtGrantedAuthoritiesConverter jwtConverter = new JwtGrantedAuthoritiesConverter();
+		jwtConverter.setAuthoritiesClaimName("authorities");
+		jwtConverter.setAuthorityPrefix("ROLE_");
+		return jwtConverter;
 	}
 
 	/***
@@ -64,9 +74,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					// put the access control uri in spring security framework
 					Logger.getLogger(this.toString()).info("初始化受限资源:" + authority.getId() + " " + authority.getMethod()
 							+ " " + authority.getAuthority() + " " + authority.getUri());
-					http.csrf().disable().authorizeRequests()
-							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri())
-							.hasRole(authority.getId());
+					http.csrf().disable()
+							.authorizeRequests((authorizeRequests) -> authorizeRequests
+									.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).hasAuthority("SCOPE_"+authority.getId()))
+							.oauth2ResourceServer().jwt();
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -78,8 +89,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //				.authenticated().and().exceptionHandling().and().sessionManagement()
 //				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-		//说明这是一个资源服务器，jwt格式的token
-		http.csrf().disable().oauth2ResourceServer().jwt();
+		// 说明这是一个资源服务器，jwt格式的token
+//		http.csrf().disable().oauth2ResourceServer().jwt();
+
 	}
 
 	@Override
