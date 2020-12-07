@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @SpringBootApplication
-public class SparrowServer {
+public class SparrowPlatformApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SparrowServer.class, args);
+        SpringApplication.run(SparrowPlatformApplication.class, args);
     }
 }
