@@ -8,7 +8,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:6060"
+host: "localhost:8091/sparrow-platform"
 basePath: "/"
 tags:
 - name: "认证"

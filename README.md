@@ -7,12 +7,8 @@
 2) 初始化数据 请参考wiki
 3) mvn spring-boot:run
 
-获取登录token:
-post /oauth2/token
-
-{"username": "sysadmin","password": "password"}
-
-rest service url请参考wiki
+关于认证登录部分，请参考认证服务器
+https://github.com/fanmeijian/sparrow-authorizaion-server
 
 数据权限，第一个为id参数，第二个为model的全名，第三个为权限
 @PreAuthorize("hasPermission(#id,'com.ywsoft.standalone.framework.entity.SwdRole','READ')")
@@ -23,4 +19,4 @@ rest service url请参考wiki
 前端请参考项目sparrow-platform-ng https://github.com/fanmeijian/sparrow-platform-ng
 
 接口文档请参考
-http://localhost:6060/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
+http://localhost:8091/sparrow-platform/swagger-ui/index.html?configUrl=/sparrow-platform/v3/api-docs/swagger-config#

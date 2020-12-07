@@ -7,6 +7,7 @@ spring:
   security:
     oauth2:
       resourceserver:        jwt:          jwk-set-uri: http://localhost:6060/.well-known/jwks.json
+          issuer-uri: http://localhost:6060
         
       client:
         registration:          sparrow-provider:
