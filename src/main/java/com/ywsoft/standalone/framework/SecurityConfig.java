@@ -6,37 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 import com.ywsoft.standalone.framework.repository.AuthorityRepository;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-	@Autowired
-	JwtRequestFilter jwtRequestFilter;
-
 	@Autowired
 	AuthorityRepository authorityRepository;
 
-	@Autowired
-	MyUserDetailsService userDetailsService;
-
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService);
-	}
-
-	@Override
-	@Bean
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
+	//用于解决默认只会获取scope的权限，而用户的实际权限在authorities里面
+	private JwtAuthenticationConverter jwtAuthenticationConverter() {
+		JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+		jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
+		jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+		JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+		return jwtAuthenticationConverter;
 	}
 
 	/***
@@ -64,20 +55,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					// put the access control uri in spring security framework
 					Logger.getLogger(this.toString()).info("初始化受限资源:" + authority.getId() + " " + authority.getMethod()
 							+ " " + authority.getAuthority() + " " + authority.getUri());
-					http.csrf().disable().authorizeRequests()
-							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri())
-							.hasRole(authority.getId());
+					http.csrf().disable()
+							.authorizeRequests((authorizeRequests) -> authorizeRequests
+									.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri())
+									.hasRole(authority.getId()))
+							.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});
-		// let the get token method allowed
-		http.csrf().disable().authorizeRequests().antMatchers("/authenticate", "/oauth2/token").permitAll().anyRequest()
-				.authenticated().and().exceptionHandling().and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Override
