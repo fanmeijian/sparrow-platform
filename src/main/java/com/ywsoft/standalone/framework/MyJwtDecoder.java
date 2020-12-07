@@ -15,7 +15,7 @@ public class MyJwtDecoder {
 	    NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(
 	      properties.getJwt().getJwkSetUri()).build();
 	    
-//	    jwtDecoder.setClaimSetConverter(new OrganizationSubClaimAdapter());
+	    jwtDecoder.setClaimSetConverter(new UsernameSubClaimAdapter());
 	    
 	    return jwtDecoder;
 	}
