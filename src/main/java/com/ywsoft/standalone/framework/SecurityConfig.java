@@ -3,6 +3,7 @@ package com.ywsoft.standalone.framework;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +21,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	AuthorityRepository authorityRepository;
 
-	//用于解决默认只会获取scope的权限，而用户的实际权限在authorities里面
+	@Value("${spring.application.name}")
+	String clientId;
+
+	// 用于解决默认只会获取scope的权限，而用户的实际权限在authorities里面
 	private JwtAuthenticationConverter jwtAuthenticationConverter() {
 		JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 		jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
@@ -36,9 +40,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// get the permission from db
-		authorityRepository.findAll().forEach(authority -> {
+		authorityRepository.findByClientId(clientId).forEach(authority -> {
 			try {
-				if (authority.getPermission().equalsIgnoreCase("ANONYMOUSE")) {
+				if (authority.getPermission().equalsIgnoreCase("DENY")) {
+					Logger.getLogger(this.toString()).info("初始化拒绝额访问资源:" + authority.getId() + " "
+							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());
+					http.csrf().disable().authorizeRequests()
+							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).denyAll();
+				} else if (authority.getPermission().equalsIgnoreCase("ANONYMOUSE")) {
 					// anonymouse access
 					Logger.getLogger(this.toString()).info("初始化匿名访问资源:" + authority.getId() + " "
 							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());

@@ -25,6 +25,8 @@ public class SwdAuthority implements Serializable {
 	private String permission;
 	
 	private String method;
+	
+	private String clientId;
 
 	public SwdAuthority() {
 	}
@@ -68,5 +70,15 @@ public class SwdAuthority implements Serializable {
 	public void setMethod(String method) {
 		this.method = method;
 	}
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+	
+	
 
 }
