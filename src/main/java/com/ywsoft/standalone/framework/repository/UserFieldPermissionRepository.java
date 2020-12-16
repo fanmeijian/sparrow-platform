@@ -22,4 +22,7 @@ public interface UserFieldPermissionRepository extends JpaRepository<SwdUserFiel
 	@Query("SELECT s FROM SwdUserFieldPermission s WHERE s.id.model=?1")
 	List<SwdUserFieldPermission> findByModel(String model);
 	
+	List<SwdUserFieldPermission> findByIdModelAndIdField(String model,String field);
+
+	
 }

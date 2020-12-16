@@ -28,7 +28,7 @@ public class AuthorityService {
 	@GetMapping("/authoritiesWithCheckByUser")
 	public ApiResponse authoritiesWithCheckByUser(@RequestParam(name="username") String username) {
 		List<Authority> list=new ArrayList<Authority>();
-		authorityRepository.findAll().forEach(o->{
+		authorityRepository.findByPermission("RESTRICT").forEach(o->{
 			Authority authority=new Authority(o);
 			userRepository.findById(username).get().getSwdAuthorities().forEach(j->{
 				if(authority.getId().equals(j.getId())) {
@@ -43,7 +43,7 @@ public class AuthorityService {
 	@GetMapping("/authoritiesWithCheckBySysrole")
 	public ApiResponse authoritiesWithCheckBySysrole(@RequestParam(name="sysroleId") String sysroleId) {
 		List<Authority> list=new ArrayList<Authority>();
-		authorityRepository.findAll().forEach(o->{
+		authorityRepository.findByPermission("RESTRICT").forEach(o->{
 			Authority authority=new Authority(o);
 			sysroleRepository.findById(sysroleId).get().getSwdAuthorities().forEach(j->{
 				if(authority.getId().equals(j.getId())) {
