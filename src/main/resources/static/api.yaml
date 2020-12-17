@@ -714,13 +714,13 @@ paths:
           description: "成功"
       security:
       - Authorization: []
-  /swdSubGroups/search/findByGroupId:
+  /swdSubGroups/search/findByIdGroupId:
     get:
       tags:
       - "群组"
       summary: "返回指定组的子组"
       parameters:
-      - name: "id"
+      - name: "groupId"
         in: "query"
         type: "integer"
         required: true

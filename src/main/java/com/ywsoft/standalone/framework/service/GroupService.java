@@ -52,21 +52,21 @@ public class GroupService {
 	public ApiResponse subGroupsRecursionTree(@RequestParam(name = "id") String id) {
 		Map<String, SwdGroup> stopRecursion = new HashMap<String, SwdGroup>();// 防止递归
 		GroupExt groupExt = new GroupExt(groupRepository.findById(id).get());
-		groupExt.getGroupUsers().addAll(groupUserRepository.findByGroupId(id, Pageable.unpaged()).toList());
+//		groupExt.getGroupUsers().addAll(groupUserRepository.findByIdGroupId(id, Pageable.unpaged()).toList());
 		stopRecursion.put(groupExt.getId(), groupExt);
 		subGroupsTree(groupExt, stopRecursion);
 		return ApiResponseFactory.getNormalReponse(groupExt);
 	}
 
 	private void subGroupsTree(GroupExt groupExt, Map<String, SwdGroup> map) {
-		for (GroupExt group : subGroupRepository.findByGroupId(groupExt.getId())) {
-			groupExt.getSubGroups().add(group);
-			if (!map.containsKey(group.getId())) {
-				map.put(group.getId(), group);
-				groupExt.getGroupUsers().addAll(groupUserRepository.findByGroupId(group.getId(),Pageable.unpaged()).toList());
-				subGroupsTree(group, map);
-			}
-		}
+//		for (GroupExt group : subGroupRepository.findByGroupId(groupExt.getId())) {
+//			groupExt.getSubGroups().add(group);
+//			if (!map.containsKey(group.getId())) {
+//				map.put(group.getId(), group);
+//				groupExt.getGroupUsers().addAll(groupUserRepository.findByIdGroupId(group.getId(),Pageable.unpaged()).toList());
+//				subGroupsTree(group, map);
+//			}
+//		}
 	}
 	
 
