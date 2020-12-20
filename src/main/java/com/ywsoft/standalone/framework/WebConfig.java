@@ -18,7 +18,7 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 @Configuration
 public class WebConfig {
 	@Bean
-	public FilterRegistrationBean corsFilter() {
+	public FilterRegistrationBean<CorsFilter> corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
@@ -26,7 +26,7 @@ public class WebConfig {
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 		source.registerCorsConfiguration("/**", config);
-		FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(source));
 		bean.setOrder(0);
 		return bean;
 	}
@@ -50,5 +50,14 @@ public class WebConfig {
 		mapper.registerModule(hibernate5Module);
 		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		return converter;
+	}
+	
+	@Bean
+	public ObjectMapper includeTransientObjectMapper() {
+	    Hibernate5Module hibernate5Module = new Hibernate5Module();
+	    hibernate5Module.disable(Hibernate5Module.Feature.USE_TRANSIENT_ANNOTATION);
+	    ObjectMapper mapper = new ObjectMapper();
+	    mapper.registerModule(hibernate5Module);
+	    return mapper;
 	}
 }

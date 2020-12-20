@@ -13,6 +13,7 @@ import org.apache.ignite.marshaller.MarshallerContext;
 import org.apache.ignite.marshaller.jdk.JdkMarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.ywsoft.standalone.framework.entity.SwdLoginLog;
 import com.ywsoft.standalone.framework.entity.SwdOperationLog;
@@ -45,7 +46,8 @@ public class SwdLogServiceImpl implements SwdLogService {
 		operationLog.setOpTime(new Date());
 		operationLog.setUri("["+request.getMethod()+"]" + request.getServletPath());
 		operationLog.setIp(request.getRemoteAddr());
-		operationLog.setUsername(request.getRemoteUser());
+//		operationLog.setUsername(request.getRemoteUser());
+		operationLog.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		try {
 			operationLog.setModelBytearray(marsh.marshal(opArgs));
 		} catch (IgniteCheckedException e) {

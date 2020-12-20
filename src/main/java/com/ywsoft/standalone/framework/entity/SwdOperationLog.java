@@ -2,6 +2,9 @@ package com.ywsoft.standalone.framework.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import java.util.Date;
 
 
@@ -32,6 +35,9 @@ public class SwdOperationLog implements Serializable {
 	private String username;
 	
 	private String ip;
+	
+	@Transient
+	private Object params;
 	
 
 	public SwdOperationLog() {
@@ -84,5 +90,16 @@ public class SwdOperationLog implements Serializable {
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
+
+    @JsonGetter(value = "params")
+	public Object getParams() {
+		return params;
+	}
+
+	public void setParams(Object params) {
+		this.params = params;
+	}
+	
+	
 
 }
