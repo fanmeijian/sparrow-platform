@@ -43,27 +43,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		authorityRepository.findByClientId(clientId).forEach(authority -> {
 			try {
 				if (authority.getPermission().equalsIgnoreCase("DENY")) {
-					Logger.getLogger(this.toString()).info("初始化拒绝额访问资源:" + authority.getId() + " "
-							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());
+//					Logger.getLogger(this.toString()).info("初始化拒绝额访问资源:" + authority.getId() + " "
+//							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());
 					http.csrf().disable().authorizeRequests()
 							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).denyAll();
 				} else if (authority.getPermission().equalsIgnoreCase("ANONYMOUSE")) {
 					// anonymouse access
-					Logger.getLogger(this.toString()).info("初始化匿名访问资源:" + authority.getId() + " "
-							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());
+//					Logger.getLogger(this.toString()).info("初始化匿名访问资源:" + authority.getId() + " "
+//							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());
 					http.csrf().disable().authorizeRequests()
 							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).permitAll();
 				} else if (authority.getPermission().equalsIgnoreCase("AUTHENTICATED")) {
 					// athenticated access
-					http.csrf().disable().authorizeRequests()
-							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).authenticated();
+//					http.csrf().disable().authorizeRequests()
+//							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).authenticated();
 					Logger.getLogger(this.toString()).info("初始化认证访问资源:" + authority.getId() + " "
 							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());
 				} else {
 					// restrict access
 					// put the access control uri in spring security framework
-					Logger.getLogger(this.toString()).info("初始化受限资源:" + authority.getId() + " " + authority.getMethod()
-							+ " " + authority.getAuthority() + " " + authority.getUri());
+//					Logger.getLogger(this.toString()).info("初始化受限资源:" + authority.getId() + " " + authority.getMethod()
+//							+ " " + authority.getAuthority() + " " + authority.getUri());
 					http.csrf().disable()
 							.authorizeRequests((authorizeRequests) -> authorizeRequests
 									.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri())
