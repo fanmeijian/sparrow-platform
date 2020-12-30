@@ -1,12 +1,8 @@
 package com.ywsoft.standalone.framework;
 
-import java.util.logging.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -55,10 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).permitAll();
 				} else if (authority.getPermission().equalsIgnoreCase("AUTHENTICATED")) {
 					// athenticated access
-//					http.csrf().disable().authorizeRequests()
-//							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).authenticated();
-					Logger.getLogger(this.toString()).info("初始化认证访问资源:" + authority.getId() + " "
-							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());
+					http.csrf().disable().authorizeRequests()
+							.antMatchers(HttpMethod.resolve(authority.getMethod()), authority.getUri()).authenticated();
+//					Logger.getLogger(this.toString()).info("初始化认证访问资源:" + authority.getId() + " "
+//							+ authority.getMethod() + " " + authority.getAuthority() + " " + authority.getUri());
 				} else {
 					// restrict access
 					// put the access control uri in spring security framework
