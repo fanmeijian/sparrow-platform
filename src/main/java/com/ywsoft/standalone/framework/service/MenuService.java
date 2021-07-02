@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import com.ywsoft.standalone.framework.repository.SysroleRepository;
 import com.ywsoft.standalone.framework.repository.UserRepository;
 
 @RestController
+@CrossOrigin
 public class MenuService {
 
 	@Autowired

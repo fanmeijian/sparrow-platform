@@ -1,16 +1,9 @@
 package com.ywsoft.standalone.framework;
 
 import java.util.Date;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.ignite.IgniteCheckedException;
-import org.apache.ignite.internal.marshaller.optimized.OptimizedMarshaller;
-import org.apache.ignite.lang.IgnitePredicate;
-import org.apache.ignite.marshaller.Marshaller;
-import org.apache.ignite.marshaller.MarshallerContext;
-import org.apache.ignite.marshaller.jdk.JdkMarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,9 +19,9 @@ public class SwdLogServiceImpl implements SwdLogService {
 	
 	@Autowired
 	OperationLogRepository operationLogRepository;
-	
-	@Autowired
-	Marshaller marsh;
+//	
+//	@Autowired
+//	Marshaller marsh;
 
 	@Override
 	public void loginLog(String username, String ip) {
@@ -48,12 +41,12 @@ public class SwdLogServiceImpl implements SwdLogService {
 		operationLog.setIp(request.getRemoteAddr());
 //		operationLog.setUsername(request.getRemoteUser());
 		operationLog.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		try {
-			operationLog.setModelBytearray(marsh.marshal(opArgs));
-		} catch (IgniteCheckedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			operationLog.setModelBytearray(marsh.marshal(opArgs));
+//		} catch (IgniteCheckedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		operationLogRepository.save(operationLog);
 		
 	}
